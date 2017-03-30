@@ -4,6 +4,7 @@ namespace App\Frontend\Modules\Episodes;
  
 use \SER\BSPA\BackController;
 use \SER\BSPA\HTTPRequest;
+use \Entity\Comment;
  
 class EpisodesController extends BackController
 {
@@ -45,7 +46,7 @@ class EpisodesController extends BackController
  
     $this->page->addVar('title', $episodes->getTitle());
     $this->page->addVar('episodes', $episodes);
-    //$this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($episodes->id()));
+    $this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($episodes->id()));
   }
  
   public function executeInsertComment(HTTPRequest $request)
@@ -55,8 +56,8 @@ class EpisodesController extends BackController
     {
       $comment = new Comment([
         'episodes' => $request->getData('episodes'),
-        'auteur' => $request->postData('auteur'),
-        'contenu' => $request->postData('contenu')
+        'author' => $request->postData('author'),
+        'message' => $request->postData('message')
       ]);
     }
     else
