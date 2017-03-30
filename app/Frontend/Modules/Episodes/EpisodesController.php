@@ -43,9 +43,9 @@ class EpisodesController extends BackController
       $this->app->httpResponse()->redirect404();
     }
  
-    $this->page->addVar('title', $episodes->titre());
+    $this->page->addVar('title', $episodes->getTitle());
     $this->page->addVar('episodes', $episodes);
-    $this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($episodes->id()));
+    //$this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($episodes->id()));
   }
  
   public function executeInsertComment(HTTPRequest $request)

@@ -44,10 +44,10 @@ abstract class Application
       $router->addRoute(new Route($route->getAttribute('url'), $route->getAttribute('module'), $route->getAttribute('action'), $vars));
     }
  
-    try
-    {
+    /*try
+    {*/
       // On récupère la route correspondante à l'URL.
-      $matchedRoute = $router->getRoute($this->httpRequest->requestURI());
+      $matchedRoute = $router->getRoute($this->httpRequest->requestURI());/* 
     }
     catch (\RuntimeException $e)
     {
@@ -56,7 +56,7 @@ abstract class Application
         // Si aucune route ne correspond, c'est que la page demandée n'existe pas.
         $this->httpResponse->redirect404();
       }
-    }
+    }*/
  
     // On ajoute les variables de l'URL au tableau $_GET.
     $_GET = array_merge($_GET, $matchedRoute->vars());

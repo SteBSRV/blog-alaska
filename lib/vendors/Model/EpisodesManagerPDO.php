@@ -29,7 +29,7 @@ class EpisodesManagerPDO extends EpisodesManager
  
   public function getList($debut = -1, $limite = -1)
   {
-    $sql = 'SELECT id, title, author, content, addDate, modDate, state FROM episodes ORDER BY id DESC';
+    $sql = 'SELECT id, title, author, content, addDate, modDate, state FROM episodes WHERE state = 2 ORDER BY id DESC';
  
     if ($debut != -1 || $limite != -1)
     {
@@ -43,8 +43,8 @@ class EpisodesManagerPDO extends EpisodesManager
  
     foreach ($listeEpisodes as $episodes)
     {
-      $episodes->setaddDate(new \DateTime($episodes->getAddDate()));
-      $episodes->setmodDate(new \DateTime($episodes->getModDate()));
+      $episodes->setAddDate(new \DateTime($episodes->getAddDate()));
+      $episodes->setModDate(new \DateTime($episodes->getModDate()));
     }
  
     $requete->closeCursor();
@@ -62,8 +62,8 @@ class EpisodesManagerPDO extends EpisodesManager
  
     if ($episodes = $requete->fetch())
     {
-      $episodes->setaddDate(new \DateTime($episodes->getAddDate()));
-      $episodes->setmodDate(new \DateTime($episodes->getModDate()));
+      $episodes->setAddDate(new \DateTime($episodes->getAddDate()));
+      $episodes->setModDate(new \DateTime($episodes->getModDate()));
  
       return $episodes;
     }

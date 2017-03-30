@@ -2,5 +2,4 @@
 <routes>
   <route url="/" module="Episodes" action="index" />
   <route url="/episode-([0-9]+)\.html" module="Episodes" action="show" vars="id"/>
-  <route url="/commenter-([0-9]+)\.html" module="Episodes" action="insertComment" vars="episode" />
 </routes>
