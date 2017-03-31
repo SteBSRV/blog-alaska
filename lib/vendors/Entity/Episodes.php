@@ -51,7 +51,7 @@ class Episodes extends Entity
       $this->errors[] = self::INVALID_CONTENT;
     }
  
-    $this->contenu = $contenu;
+    $this->content = $content;
   }
  
   public function setAddDate(\DateTime $addDate)
