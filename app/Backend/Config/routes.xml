@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<routes>
+  <route url="/admin/" module="Episodes" action="index" />
+  <route url="/admin/login/" module="Connexion" action="login" />
+  <route url="/admin/logout/" module="Connexion" action="logout" />
+  <route url="/admin/episode-insert\.html" module="Episodes" action="insert" />
+  <route url="/admin/episode-update-([0-9]+)\.html" module="Episodes" action="update" vars="id" />
+  <route url="/admin/episode-delete-([0-9]+)\.html" module="Episodes" action="delete" vars="id" />
+  <route url="/admin/comment-update-([0-9]+)\.html" module="Episodes" action="updateComment" vars="id" />
+  <route url="/admin/comment-delete-([0-9]+)\.html" module="Episodes" action="deleteComment" vars="id" />
+</routes>

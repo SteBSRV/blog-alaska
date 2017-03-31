@@ -46,11 +46,6 @@
                     <li>
                         <a href="/">Accueil</a>
                     </li>
-                    <?php if ($user->isAuthenticated()) { ?>
-                    <li>
-                        <a href="#">Admin</a>
-                    </li>
-                    <?php } ?>
                     <li>
                         <a href="/episode-1.html">Episode 1</a>
                     </li>
@@ -63,6 +58,19 @@
                     <li>
                         <a href="#">A propos</a>
                     </li>
+                    <?php if ($user->isAuthenticated() === false) { ?>
+                    <li>
+                        <a href="/admin/login/">Connexion</a>
+                    </li>
+                    <?php }
+                    if ($user->isAuthenticated()) { ?>
+                    <li>
+                        <a href="/admin/">Admin</a>
+                    </li>
+                    <li>
+                        <a href="/admin/logout/">Déconnexion</a>
+                    </li>
+                    <?php } ?>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
