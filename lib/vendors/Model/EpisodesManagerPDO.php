@@ -8,7 +8,7 @@ class EpisodesManagerPDO extends EpisodesManager
 {
   protected function add(Episodes $episodes)
   {
-    $requete = $this->dao->prepare('INSERT INTO episodes SET author = :author, title = :title, content = :content, addDate = NOW(), modDate = NOW()');
+    $requete = $this->dao->prepare('INSERT INTO episodes SET author = :author, title = :title, content = :content, addDate = NOW(), modDate = NOW(), state = 2');
  
     $requete->bindValue(':title', $episodes->getTitle());
     $requete->bindValue(':author', $episodes->getAuthor());
@@ -19,7 +19,7 @@ class EpisodesManagerPDO extends EpisodesManager
  
   public function count()
   {
-    return $this->dao->query('SELECT COUNT(*) FROM episodes')->fetchColumn();
+    return $this->dao->query('SELECT COUNT(*) FROM episodes WHERE state = 2')->fetchColumn();
   }
  
   public function delete($id)

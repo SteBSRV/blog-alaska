@@ -63,5 +63,5 @@ abstract class CommentsManager extends Manager
    * @param $id L'identifiant du commentaire
    * @return Comment
    */
-  abstract public function getComment($id);
+  abstract public function get($id);
 }

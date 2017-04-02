@@ -23,13 +23,19 @@
 					?>
 					<fieldset>
 					  <legend>
-					    Posté par <strong><?php echo $comment->getAuthor();?></strong> le <?php echo $comment->getDate()->format('d/m/Y à H\hi');?>
+					    Posté par <strong><?= htmlspecialchars($comment->getAuthor()) ?></strong> le <?= $comment->getDate()->format('d/m/Y à H\hi') ?>
+					    <?php if ($user->isAuthenticated()) { ?> -
+					      <a href="admin/comment-update-<?= $comment['id'] ?>.html">Modifier</a> |
+					      <a href="admin/comment-delete-<?= $comment['id'] ?>.html">Supprimer</a>
+					    <?php } ?>
 					  </legend>
-					  <p><?php echo (nl2br($comment->getMessage()));?></p>
+					  <p><?= nl2br(htmlspecialchars($comment->getMessage())) ?></p>
 					</fieldset>
 					<?php
 					}
-					?>   
+					?>
+					 
+					<p><a href="commenter-<?= $episodes->getId() ?>.html">Ajouter un commentaire</a></p> 
                 </div>
             </div>
         </div>

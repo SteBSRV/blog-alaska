@@ -6,19 +6,19 @@ use \SER\BSPA\HTTPRequest;
 use \Entity\Episodes;
 use \Entity\Comment;
 use \FormBuilder\CommentFormBuilder;
-use \FormBuilder\NewsFormBuilder;
-use \SER\BSPA\FormHandler;
+use \FormBuilder\EpisodesFormBuilder;
+use \SER\BSPA\Form\FormHandler;
  
 class EpisodesController extends BackController
 {
   public function executeDelete(HTTPRequest $request)
   {
-    $newsId = $request->getData('id');
+    $episodeId = $request->getData('id');
  
+    $this->managers->getManagerOf('Comments')->deleteFromEpisode($episodeId);
     $this->managers->getManagerOf('Episodes')->delete($episodeId);
-    $this->managers->getManagerOf('Comments')->deleteFromNews($episodeId);
  
-    $this->app->user()->setFlash('La news a bien été supprimée !');
+    $this->app->user()->setFlash('L\'épisode a bien été supprimée !');
  
     $this->app->httpResponse()->redirect('.');
   }
@@ -118,7 +118,7 @@ class EpisodesController extends BackController
       }
     }
  
-    $formBuilder = new NewsFormBuilder($episode);
+    $formBuilder = new EpisodesFormBuilder($episode);
     $formBuilder->build();
  
     $form = $formBuilder->form();

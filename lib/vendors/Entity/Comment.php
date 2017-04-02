@@ -11,7 +11,7 @@ class Comment extends Entity
             $date;
  
   const INVALID_AUTHOR = 1;
-  const INVALID_CONTENT = 2;
+  const INVALID_MESSAGE = 2;
  
   public function isValid()
   {
@@ -37,7 +37,7 @@ class Comment extends Entity
   {
     if (!is_string($message) || empty($message))
     {
-      $this->errors[] = self::INVALID_CONTENT;
+      $this->errors[] = self::INVALID_MESSAGE;
     }
  
     $this->message = $message;

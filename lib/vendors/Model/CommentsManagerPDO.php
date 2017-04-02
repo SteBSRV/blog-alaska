@@ -10,7 +10,7 @@ class CommentsManagerPDO extends CommentsManager
     $q = $this->dao->prepare('INSERT INTO comments SET author = :author, message = :message, date = NOW(), state = 1, parent_id = :parent, episode_id = :episode ');
  
     $q->bindValue(':episode', $comment->getEpisode(), \PDO::PARAM_INT);
-    $q->bindValue(':parent', $comment->getParent(), \PDO::PARAM_INT);
+    $q->bindValue(':parent', NULL/*$comment->getParent(), \PDO::PARAM_INT*/);
     $q->bindValue(':author', $comment->getAuthor());
     $q->bindValue(':message', $comment->getMessage());
  
@@ -26,7 +26,7 @@ class CommentsManagerPDO extends CommentsManager
  
   public function deleteFromEpisode($episode)
   {
-    $this->dao->exec('DELETE FROM comments WHERE episode = '.(int) $episode);
+    $this->dao->exec('DELETE FROM comments WHERE episode_id = '.(int) $episode);
   }
  
   public function getListOf($episode)
@@ -63,7 +63,7 @@ class CommentsManagerPDO extends CommentsManager
     $q->execute();
   }
  
-  public function getComment($id)
+  public function get($id)
   {
     $q = $this->dao->prepare('SELECT id, author, message, date, state, parent_id, episode_id FROM comments WHERE id = :id');
     $q->bindValue(':id', (int) $id, \PDO::PARAM_INT);

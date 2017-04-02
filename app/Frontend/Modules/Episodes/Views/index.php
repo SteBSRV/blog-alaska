@@ -4,7 +4,7 @@ foreach ($listeEpisodes as $episodes)
 {
 ?>
 <div class="post-preview">
-    <?php echo '<a href="episode-'.$episodes['id'].'.html">';?>
+    <?php echo '<a href="episode-'.$episodes->getId().'.html">';?>
         <h2 class="post-title">
             <?php echo $episodes->getTitle();?>
         </h2>
@@ -18,3 +18,18 @@ foreach ($listeEpisodes as $episodes)
 </div>
 <?php
 }
+/* Pager */
+if ($page < $nbrPages) {?>
+    <hr>
+    <ul class="pager">
+        <li class="next">
+            <a href="<?= '/page-' . ((int)$page + 1) ?>">Plus anciens &rarr;</a>
+        </li>
+    </ul>
+<?php } if ($page > 1) {?>
+    <ul class="pager">
+        <li class="previous">
+            <a href="<?= '/page-' . ((int)$page - 1) ?>">&larr; Plus récents</a>
+        </li>
+    </ul>
+<?php }

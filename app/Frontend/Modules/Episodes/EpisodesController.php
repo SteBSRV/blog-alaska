@@ -5,6 +5,8 @@ namespace App\Frontend\Modules\Episodes;
 use \SER\BSPA\BackController;
 use \SER\BSPA\HTTPRequest;
 use \Entity\Comment;
+use \FormBuilder\CommentFormBuilder;
+use \SER\BSPA\Form\FormHandler;
  
 class EpisodesController extends BackController
 {
@@ -18,9 +20,16 @@ class EpisodesController extends BackController
  
     // On récupère le manager des news.
     $manager = $this->managers->getManagerOf('Episodes');
+
+    // Pagination automatique :
+    $page = $request->getData('page');
+    $nbrPages = ceil($manager->count() / $nombreEpisodes);
+    if (is_null($page)) $page = 1;
+    $listStart = ($page - 1) * $nombreEpisodes;
  
-    $listeEpisodes = $manager->getList(0, $nombreEpisodes);
+    $listeEpisodes = $manager->getList($listStart, $nombreEpisodes);
  
+    // "Lire la suite[...]"
     foreach ($listeEpisodes as $episodes)
     {
       if (strlen($episodes->getContent()) > $nombreCaracteres)
@@ -33,6 +42,8 @@ class EpisodesController extends BackController
     }
     // On ajoute la variable $listeEpisodes à la vue.
     $this->page->addVar('listeEpisodes', $listeEpisodes);
+    $this->page->addVar('nbrPages', $nbrPages);
+    $this->page->addVar('page', $page);
   }
  
   public function executeShow(HTTPRequest $request)
@@ -46,7 +57,7 @@ class EpisodesController extends BackController
  
     $this->page->addVar('title', $episodes->getTitle());
     $this->page->addVar('episodes', $episodes);
-    $this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($episodes->id()));
+    $this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($episodes->getId()));
   }
  
   public function executeInsertComment(HTTPRequest $request)
@@ -55,7 +66,7 @@ class EpisodesController extends BackController
     if ($request->method() == 'POST')
     {
       $comment = new Comment([
-        'episodes' => $request->getData('episodes'),
+        'episode' => $request->getData('episodes'),
         'author' => $request->postData('author'),
         'message' => $request->postData('message')
       ]);
@@ -76,7 +87,7 @@ class EpisodesController extends BackController
     {
       $this->app->user()->setFlash('Le commentaire a bien été ajouté, merci !');
  
-      $this->app->httpResponse()->redirect('episodes-'.$request->getData('episodes').'.html');
+      $this->app->httpResponse()->redirect('episode-'.$request->getData('episodes').'.html');
     }
  
     $this->page->addVar('comment', $comment);

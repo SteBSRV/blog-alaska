@@ -46,11 +46,15 @@
                     <li>
                         <a href="/">Accueil</a>
                     </li>
-                    <li>
-                        <a href="/episode-1.html">Episode 1</a>
-                    </li>
-                    <li>
-                        <a href="/episode-2.html">Episode 2</a>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Episodes <span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                        <?php foreach ($listeEpisodes as $episode) {
+                            $title = $episode->getTitle();
+                            echo '<li><a href="/episode-' . $title . '.html">Episode ' . $title . '</a></li>';
+                        }
+                        ?>
+                      </ul>
                     </li>
                     <li>
                         <a href="#">Contact</a>
@@ -102,13 +106,6 @@
                 <?php
                   echo $content;
                 ?>
-                <hr>
-                <!-- Pager -->
-                <ul class="pager">
-                    <li class="next">
-                        <a href="#">Older Posts &rarr;</a>
-                    </li>
-                </ul>
             </div>
         </div>
     </div>

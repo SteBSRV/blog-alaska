@@ -26,7 +26,7 @@ abstract class Entity implements \ArrayAccess
     return $this->errors;
   }
  
-  public function id()
+  public function getId()
   {
     return $this->id;
   }
