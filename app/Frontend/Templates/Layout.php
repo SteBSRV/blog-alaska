@@ -49,18 +49,16 @@
                     <li class="dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Episodes <span class="caret"></span></a>
                       <ul class="dropdown-menu">
-                        <?php foreach ($listeEpisodes as $episode) {
+                        <?php foreach ($listeEpisodesMenu as $episode) {
                             $title = $episode->getTitle();
-                            echo '<li><a href="/episode-' . $title . '.html">Episode ' . $title . '</a></li>';
+                            $id = $episode->getId();
+                            echo '<li><a href="/episode-' . $id . '.html">Episode ' . $title . '</a></li>';
                         }
                         ?>
                       </ul>
                     </li>
                     <li>
-                        <a href="#">Contact</a>
-                    </li>
-                    <li>
-                        <a href="#">A propos</a>
+                        <a href="/contact/">Contact</a>
                     </li>
                     <?php if ($user->isAuthenticated() === false) { ?>
                     <li>

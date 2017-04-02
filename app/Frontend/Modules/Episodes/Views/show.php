@@ -8,11 +8,12 @@
 
 					<?php if ($episodes->getAddDate() != $episodes->getModDate()) { ?>
 					  <p style="text-align: right;"><small><em>Modifiée le <?php echo $episodes->getModDate()->format('d/m/Y à H\hi');?></em></small></p>
-					<?php } ?>
+					<?php }
+					if ($user->isAuthenticated() === true) {
+						echo '<a href="/admin/episode-update-' . $episodes->getId() . '.html"><em>Modifier</em></a>';
+					}
 
-					<?php
-					if (empty($comments))
-					{
+					if (empty($comments)) {
 					?>
 					<p>Aucun commentaire n'a encore été posté. Soyez le premier à en laisser un !</p>
 					<?php

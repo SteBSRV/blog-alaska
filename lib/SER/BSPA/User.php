@@ -41,6 +41,12 @@ class User
     }
  
     $_SESSION['auth'] = $authenticated;
+
+    if (!$authenticated) {
+      $_SESSION = [];
+      session_destroy();
+      // Cookie
+    }
   }
  
   public function setFlash($value)

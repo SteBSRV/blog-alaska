@@ -30,7 +30,7 @@ class EpisodesController extends BackController
     $listeEpisodes = $manager->getList($listStart, $nombreEpisodes);
  
     // "Lire la suite[...]"
-    foreach ($listeEpisodes as $episodes)
+    /*foreach ($listeEpisodes as $episodes)
     {
       if (strlen($episodes->getContent()) > $nombreCaracteres)
       {
@@ -39,16 +39,18 @@ class EpisodesController extends BackController
  
         $episodes->setContent($debut);
       }
-    }
+    }*/
     // On ajoute la variable $listeEpisodes à la vue.
     $this->page->addVar('listeEpisodes', $listeEpisodes);
     $this->page->addVar('nbrPages', $nbrPages);
     $this->page->addVar('page', $page);
+    $this->page->addVar('listeEpisodesMenu', $manager->getList());
   }
  
   public function executeShow(HTTPRequest $request)
   {
-    $episodes = $this->managers->getManagerOf('Episodes')->getUnique($request->getData('id'));
+    $manager = $this->managers->getManagerOf('Episodes');
+    $episodes = $manager->getUnique($request->getData('id'));
  
     if (empty($episodes))
     {
@@ -58,6 +60,7 @@ class EpisodesController extends BackController
     $this->page->addVar('title', $episodes->getTitle());
     $this->page->addVar('episodes', $episodes);
     $this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($episodes->getId()));
+    $this->page->addVar('listeEpisodesMenu', $manager->getList());
   }
  
   public function executeInsertComment(HTTPRequest $request)

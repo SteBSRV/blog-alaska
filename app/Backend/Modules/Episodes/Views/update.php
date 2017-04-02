@@ -3,6 +3,14 @@
   <p>
     <?= $form ?>
  
-    <button type="submit" class="btn btn-primary">Modifier</button>
+    <button type="submit" class="btn btn-primary">Valider</button>
   </p>
 </form>
+
+<!-- TinyMCE -->
+<script src='/../../js/tinymce/tinymce.min.js'></script>
+<script>
+    tinymce.init({
+        selector: 'textarea'
+    });
+</script>
