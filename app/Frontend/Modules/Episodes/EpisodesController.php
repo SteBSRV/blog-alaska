@@ -30,7 +30,7 @@ class EpisodesController extends BackController
     $listeEpisodes = $manager->getList($listStart, $nombreEpisodes);
  
     // "Lire la suite[...]"
-    /*foreach ($listeEpisodes as $episodes)
+    foreach ($listeEpisodes as $episodes)
     {
       if (strlen($episodes->getContent()) > $nombreCaracteres)
       {
@@ -39,7 +39,7 @@ class EpisodesController extends BackController
  
         $episodes->setContent($debut);
       }
-    }*/
+    }
     // On ajoute la variable $listeEpisodes à la vue.
     $this->page->addVar('listeEpisodes', $listeEpisodes);
     $this->page->addVar('nbrPages', $nbrPages);

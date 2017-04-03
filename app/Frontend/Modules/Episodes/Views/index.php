@@ -8,7 +8,7 @@ foreach ($listeEpisodes as $episodes)
         <h2 class="post-title">
             <?php echo $episodes->getTitle();?>
         </h2>
-            <?php echo $episodes->getContent();?>
+            <?php echo strip_tags($episodes->getContent());?>
     </a>
     <p class="post-meta">
     	Posté par <?php echo $episodes->getAuthor()?>, le <?php echo $episodes->getAddDate()->format('d/m/Y à H\hi')?>
