@@ -18,6 +18,11 @@
 					<p>Aucun commentaire n'a encore été posté. Soyez le premier à en laisser un !</p>
 					<?php
 					}
+
+					// Affichage lien en haut et en bas si "beaucoup" de commentaires sont présents
+					if ($nbrComments >= 5) { ?>
+						<p><a href="commenter-<?= $episodes->getId() ?>.html">Ajouter un commentaire</a></p> 
+					<?php } 
 					 
 					foreach ($comments as $comment)
 					{
@@ -26,11 +31,12 @@
 					  <legend>
 					    Posté par <strong><?= htmlspecialchars($comment->getAuthor()) ?></strong> le <?= $comment->getDate()->format('d/m/Y à H\hi') ?>
 					    <?php if ($user->isAuthenticated()) { ?> -
-					      <a href="admin/comment-update-<?= $comment['id'] ?>.html">Modifier</a> |
-					      <a href="admin/comment-delete-<?= $comment['id'] ?>.html">Supprimer</a>
+					      <a href="admin/comment-update-<?= $comment->getId() ?>.html">Modifier</a> |
+					      <a href="admin/comment-delete-<?= $comment->getId() ?>.html">Supprimer</a>
 					    <?php } ?>
 					  </legend>
 					  <p><?= nl2br(htmlspecialchars($comment->getMessage())) ?></p>
+					  <p style="text-align: right;"><small><em><a href="admin/comment-response-<?= $comment->getId() ?>.html">Répondre</a></em></small></p>
 					</fieldset>
 					<?php
 					}

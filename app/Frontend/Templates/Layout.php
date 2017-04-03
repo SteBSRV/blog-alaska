@@ -64,13 +64,16 @@
                     <li>
                         <a href="/admin/login/">Connexion</a>
                     </li>
+                    <li>
+                        <a href="/signin/">Inscription</a>
+                    </li>
                     <?php }
                     if ($user->isAuthenticated()) { ?>
                     <li>
                         <a href="/admin/">Admin</a>
                     </li>
                     <li>
-                        <a href="/admin/logout/">Déconnexion</a>
+                        <a href="/admin/logout/">Déconnexion <em>(<?= $user->getAttribute('pseudo')?>)</em></a>
                     </li>
                     <?php } ?>
                 </ul>

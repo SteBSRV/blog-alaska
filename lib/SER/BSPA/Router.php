@@ -29,7 +29,6 @@ class Router
           $listVars = [];
  
           // On crée un nouveau tableau clé/valeur
-          // (clé = nom de la variable, valeur = sa valeur)
           foreach ($varsValues as $key => $match)
           {
             // La première valeur contient entièrement la chaine capturée (voir la doc sur preg_match)

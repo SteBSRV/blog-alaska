@@ -9,6 +9,8 @@ class ConnexionController extends BackController
   public function executeLogin(HTTPRequest $request)
   {
     $this->page->addVar('title', 'Connexion');
+
+    $manager = $this->managers->getManagerOf('Users');
  
     if ($request->postExists('login'))
     {
@@ -18,6 +20,7 @@ class ConnexionController extends BackController
       if ($login == $this->app->config()->get('login') && $password == $this->app->config()->get('pass'))
       {
         $this->app->user()->setAuthenticated(true);
+        $this->app->user()->setAttribute('pseudo', $login);
         $this->app->httpResponse()->redirect('/');
       }
       else
@@ -34,12 +37,11 @@ class ConnexionController extends BackController
     if ($this->app->user()->isAuthenticated() === true)
     {
         $this->app->user()->setAuthenticated(false);
-        $this->app->user()->setFlash('Vous êtes maintenant déconnecté.');
-        $this->app->httpResponse()->redirect('.');
+        $this->app->httpResponse()->redirect('/');
     }
     else
     {
-      $this->app->user()->setFlash('Déconnexion impossible, vous n\êtes pas connecté.');
+      $this->app->user()->setFlash('Déconnexion impossible, vous n\'êtes pas connecté.');
     }
   }
 }

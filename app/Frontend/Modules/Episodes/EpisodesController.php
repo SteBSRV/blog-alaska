@@ -18,7 +18,7 @@ class EpisodesController extends BackController
     // On ajoute une définition pour le titre.
     $this->page->addVar('title', 'Liste des '.$nombreEpisodes.' derniers épisodes');
  
-    // On récupère le manager des news.
+    // On récupère le manager des épisodes.
     $manager = $this->managers->getManagerOf('Episodes');
 
     // Pagination automatique :
@@ -40,7 +40,7 @@ class EpisodesController extends BackController
         $episodes->setContent($debut);
       }
     }
-    // On ajoute la variable $listeEpisodes à la vue.
+    // On ajoute les variables à la vue.
     $this->page->addVar('listeEpisodes', $listeEpisodes);
     $this->page->addVar('nbrPages', $nbrPages);
     $this->page->addVar('page', $page);
@@ -59,6 +59,7 @@ class EpisodesController extends BackController
  
     $this->page->addVar('title', $episodes->getTitle());
     $this->page->addVar('episodes', $episodes);
+    $this->page->addVar('nbrComments', $manager->countComments($episodes->getId()));
     $this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($episodes->getId()));
     $this->page->addVar('listeEpisodesMenu', $manager->getList());
   }
