@@ -6,6 +6,21 @@ use \Entity\Users;
  
 class UsersManagerPDO extends UsersManager
 {
+	public function add(Users $user)
+	{
+	    $requete = $this->dao->prepare('INSERT INTO users SET login = :login, password = :pass_sha1, email = :email, lastVisitDate = NOW(), inscriptionDate = NOW(), level = 1');
+	 
+	    $requete->bindValue(':login', $user->getLogin());
+	    $requete->bindValue(':pass_sha1', $user->getPassword());
+	    $requete->bindValue(':email', $user->getEmail());
+	 
+	    if($requete->execute())
+	    {
+	    	return true;
+	    }
+	    return false;
+	}
+
 	public function getAll()
 	{
 	    $requete = $this->dao->query('SELECT id, login, password, email, lastVisitDate, InscriptionDate, level FROM users ORDER BY id DESC');
@@ -33,16 +48,19 @@ class UsersManagerPDO extends UsersManager
 		return $exists = ($requete->fetch()) ? true : false;
 	}
 
-	public function checkConnexion($user)
+	public function checkConnexion($login, $password)
 	{
-		$requete = $this->dao->prepare('SELECT login FROM users WHERE login = "' . $login .'"');
+		$requete = $this->dao->prepare('SELECT login FROM users WHERE login = :login AND password = :password');
+		$requete->bindValue(':login', $login);
+		$requete->bindValue(':password', $password);
+
 	    $requete->execute();
 	 
 	    /*$requete->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Users');*/
 	 
 	    if ($requete->fetch())
 	    {
-	      return true;
+	    	return true;
 	    }
 	 
 	    return false;

@@ -3,6 +3,8 @@
 namespace Entity;
  
 use \SER\BSPA\Entity;
+
+session_start();
  
 class Users extends Entity
 {

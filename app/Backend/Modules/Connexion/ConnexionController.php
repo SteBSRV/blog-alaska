@@ -17,10 +17,11 @@ class ConnexionController extends BackController
       $login = $request->postData('login');
       $password = $request->postData('password');
  
-      if ($login == $this->app->config()->get('login') && $password == $this->app->config()->get('pass'))
+      if ($manager->checkConnexion($login, sha1($password))/*$login == $this->app->config()->get('login') && $password == $this->app->config()->get('pass')*/)
       {
-        $this->app->user()->setAuthenticated(true);
+        $this->app->user()->setAuthenticated();
         $this->app->user()->setAttribute('pseudo', $login);
+        $this->app->user()->setFlash('Connexion réussi, bonne visite '.$login.'.');
         $this->app->httpResponse()->redirect('/');
       }
       else

@@ -2,6 +2,8 @@
 /* /lib/SER/BSPA/Application.php */
 namespace SER\BSPA;
 
+use \Entity\Users;
+
 abstract class Application
 {
   protected $httpRequest;
@@ -14,7 +16,7 @@ abstract class Application
   {
     $this->httpRequest = new HTTPRequest($this);
     $this->httpResponse = new HTTPResponse($this);
-    $this->user = new User();
+    $this->user = new Users();
     $this->config = new Config($this);
  
     $this->name = '';
