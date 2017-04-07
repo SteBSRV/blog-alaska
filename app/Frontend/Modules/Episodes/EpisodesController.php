@@ -66,42 +66,85 @@ class EpisodesController extends BackController
  
   public function executeInsertComment(HTTPRequest $request)
   {
-    if ($this->app->user()->isAuthenticated())
+    // Si le formulaire a été envoyé.
+    if ($request->method() == 'POST')
     {
-      // Si le formulaire a été envoyé.
-      if ($request->method() == 'POST')
-      {
-        $comment = new Comment([
-          'episode' => $request->getData('episodes'),
-          'author' => $request->postData('author'),
-          'message' => $request->postData('message')
-        ]);
-      }
-      else
-      {
-        $comment = new Comment;
-      }
-   
-      $formBuilder = new CommentFormBuilder($comment);
-      $formBuilder->build();
-   
-      $form = $formBuilder->form();
-   
-      $formHandler = new FormHandler($form, $this->managers->getManagerOf('Comments'), $request);
-   
-      if ($formHandler->process())
-      {
-        $this->app->user()->setFlash('Le commentaire a bien été ajouté, merci !');
-   
-        $this->app->httpResponse()->redirect('episode-'.$request->getData('episodes').'.html');
-      }
-   
-      $this->page->addVar('comment', $comment);
-      $this->page->addVar('form', $form->createView());
-      $this->page->addVar('title', 'Ajout d\'un commentaire');
-    } else {
-      $this->app->user()->setFlash('Vous devez vous connecter pour écrire un commentaire.');
-        $this->app->httpResponse()->redirect('/episode-'.$request->getData('episodes').'.html');  
-      }
+      $comment = new Comment([
+        'episodeId' => $request->getData('episodes'),
+        'author' => $request->postData('author'),
+        'message' => $request->postData('message')
+      ]);
+    }
+    else
+    {
+      $comment = new Comment;
+    }
+ 
+    $formBuilder = new CommentFormBuilder($comment);
+    $formBuilder->build();
+ 
+    $form = $formBuilder->form();
+ 
+    $formHandler = new FormHandler($form, $this->managers->getManagerOf('Comments'), $request);
+
+    $listeEpisodesMenu = $this->managers->getManagerOf('Episodes')->getList();
+ 
+    if ($formHandler->process())
+    {
+      $this->app->user()->setFlash('Le commentaire a bien été ajouté, merci !');
+ 
+      $this->app->httpResponse()->redirect('episode-'.$request->getData('episodes').'.html');
+    }
+ 
+    $this->page->addVar('comment', $comment);
+    $this->page->addVar('form', $form->createView());
+    $this->page->addVar('title', 'Ajout d\'un commentaire');
+    $this->page->addVar('listeEpisodesMenu', $listeEpisodesMenu);
+  }
+
+  public function executeResponseComment(HTTPRequest $request)
+  {
+    // Si le formulaire a été envoyé.
+    if ($request->method() == 'POST')
+    {
+      $comment = new Comment([
+        'parentId' => $request->getData('comment'),
+        'author' => $request->postData('author'),
+        'message' => $request->postData('message')
+      ]);
+    }
+    else
+    {
+      $comment = new Comment(['parentId' => $request->getData('comment')]);
+    }
+
+    $parentId = $request->getData('comment');
+    $manager = $this->managers->getManagerOf('Comments');
+    $episode = $manager->get($parentId)->getEpisodeId();
+    $comment->setEpisodeId($episode);
+
+    $level = ($manager->get($parentId)->getLevel()) + 1;
+    $comment->setLevel($level);
+ 
+    $formBuilder = new CommentFormBuilder($comment);
+    $formBuilder->build();
+ 
+    $form = $formBuilder->form();
+ 
+    $formHandler = new FormHandler($form, $manager, $request);
+
+    $listeEpisodesMenu = $this->managers->getManagerOf('Episodes')->getList();
+ 
+    if ($formHandler->process())
+    {
+      $this->app->user()->setFlash('Le commentaire a bien été ajouté, merci !');
+ 
+      $this->app->httpResponse()->redirect('episode-'.$episode.'.html');
+    }
+ 
+    $this->page->addVar('comment', $comment);
+    $this->page->addVar('form', $form->createView());
+    $this->page->addVar('title', 'Ajout d\'un commentaire');
+    $this->page->addVar('listeEpisodesMenu', $listeEpisodesMenu);
   }
 }

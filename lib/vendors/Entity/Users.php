@@ -13,7 +13,6 @@ class Users extends Entity
             $email,
             $lastVisitDate,
             $inscriptionDate,
-            $permission,
             $state;
  
   const INVALID_LOGIN = 1;
@@ -113,12 +112,6 @@ class Users extends Entity
     $this->inscriptionDate = $inscriptionDate;
   }
 
-  public function setPermission($permission)
-  {
-    // Utilisation des opétateurs de bits pour gérer les permissions.
-    $this->permission = (int)$permission;
-  }
-
   public function setState($state)
   {
     $this->state = (int)$state;
@@ -149,11 +142,6 @@ class Users extends Entity
   public function getInscriptionDate()
   {
     return $this->inscriptionDate;
-  }
-
-  public function getPermission()
-  {
-    return $this->permission;
   }
 
   public function getState()

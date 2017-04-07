@@ -39,6 +39,7 @@ class EpisodesController extends BackController
     $manager = $this->managers->getManagerOf('Episodes');
  
     $this->page->addVar('listeEpisodes', $manager->getListAdmin());
+    $this->page->addVar('listeEpisodesMenu', $manager->getList());
     $this->page->addVar('nombreEpisodes', $manager->count());
   }
  

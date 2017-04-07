@@ -27,7 +27,7 @@
 					foreach ($comments as $comment)
 					{
 					?>
-					<fieldset>
+					<fieldset class="level-<?= $comment->getLevel()?>">
 					  <legend>
 					    Posté par <strong><?= htmlspecialchars($comment->getAuthor()) ?></strong> le <?= $comment->getDate()->format('d/m/Y à H\hi') ?>
 					    <?php if ($user->isAuthenticated()) { ?> -
@@ -36,7 +36,7 @@
 					    <?php } ?>
 					  </legend>
 					  <p><?= nl2br(htmlspecialchars($comment->getMessage())) ?></p>
-					  <p style="text-align: right;"><small><em><a href="admin/comment-response-<?= $comment->getId() ?>.html">Répondre</a></em></small></p>
+					  <?php if ($comment->getLevel() < 3) {?><p style="text-align: right;"><small><em><a href="/commenter-reponse-<?= $comment->getId() ?>.html">Répondre</a></em></small></p><?php }?>
 					</fieldset>
 					<?php
 					}

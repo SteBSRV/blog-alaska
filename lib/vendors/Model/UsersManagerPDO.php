@@ -8,7 +8,7 @@ class UsersManagerPDO extends UsersManager
 {
 	public function add(Users $user)
 	{
-	    $requete = $this->dao->prepare('INSERT INTO users SET login = :login, password = :pass_sha1, email = :email, lastVisitDate = NOW(), inscriptionDate = NOW(), permission = 1');
+	    $requete = $this->dao->prepare('INSERT INTO users SET login = :login, password = :pass_sha1, email = :email, lastVisitDate = NOW(), inscriptionDate = NOW()');
 	 
 	    $requete->bindValue(':login', $user->getLogin());
 	    $requete->bindValue(':pass_sha1', $user->getPassword());
@@ -41,7 +41,6 @@ class UsersManagerPDO extends UsersManager
 	 
 	    if ($user = $requete->fetch())
 	    {
-	    	$user->setAttribute('permission', $user->getPermission());
 	    	$this->dao->prepare('UPDATE users SET  lastVisitDate = NOW() WHERE login ="'.$login.'"')->execute();
 	    	return true;
 	    }

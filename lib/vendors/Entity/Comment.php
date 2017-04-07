@@ -5,22 +5,30 @@ use \SER\BSPA\Entity;
  
 class Comment extends Entity
 {
-  protected $episode,
-            $author,
+  protected $author,
             $message,
-            $date;
+            $date,
+            $state,
+            $parentId,
+            $level = 1,
+            $episodeId;
  
   const INVALID_AUTHOR = 1;
   const INVALID_MESSAGE = 2;
+  const INVALID_LEVEL = 3;
+
+  // METHODS //
  
   public function isValid()
   {
     return !(empty($this->author) || empty($this->message));
   }
+
+  // SETTERS //
  
-  public function setEpisode($episode)
+  public function setEpisodeId($episode)
   {
-    $this->episode = (int) $episode;
+    $this->episodeId = $episode;
   }
  
   public function setAuthor($author)
@@ -47,10 +55,32 @@ class Comment extends Entity
   {
     $this->date = $date;
   }
- 
-  public function getEpisode()
+
+  public function setState($state)
   {
-    return $this->episode;
+    $this->state = $state;
+  }
+
+  public function setParentId($parent)
+  {
+    $this->parentId = $parent;
+  }
+
+  public function setLevel($level)
+  {
+    if ($level > 3)
+    {
+      throw new \RuntimeException('Vous ne pouvez pas répondre sur plus de 3 niveaux', self::INVALID_LEVEL);
+    } else {
+      $this->level = $level;
+    }
+  }
+ 
+  // GETTERS //
+
+  public function getEpisodeId()
+  {
+    return $this->episodeId;
   }
  
   public function getAuthor()
@@ -66,5 +96,20 @@ class Comment extends Entity
   public function getDate()
   {
     return $this->date;
+  }
+
+  public function getState()
+  {
+    return $this->state;
+  }
+
+  public function getParentId()
+  {
+    return $this->parentId;
+  }
+
+  public function getLevel()
+  {
+    return $this->level;
   }
 }
