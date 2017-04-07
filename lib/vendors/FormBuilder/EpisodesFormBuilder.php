@@ -4,6 +4,7 @@ namespace FormBuilder;
 use \SER\BSPA\Form\FormBuilder;
 use \SER\BSPA\Form\StringField;
 use \SER\BSPA\Form\TextField;
+use \SER\BSPA\Form\SelectField;
 use \SER\BSPA\Form\MaxLengthValidator;
 use \SER\BSPA\Form\NotNullValidator;
  
@@ -14,6 +15,8 @@ class EpisodesFormBuilder extends FormBuilder
     $this->form->add(new StringField([
         'label' => 'Auteur',
         'name' => 'author',
+        'value' => $_SESSION['pseudo'],
+        'readonly' => 'readonly',
         'maxLength' => 20,
         'validators' => [
           new MaxLengthValidator('L\'auteur spécifié est trop long (20 caractères maximum)', 20),
@@ -37,6 +40,12 @@ class EpisodesFormBuilder extends FormBuilder
         'validators' => [
           new NotNullValidator('Merci de spécifier le contenu de l\'épisode'),
         ],
-       ]));
+       ]))
+       ->add(new SelectField([
+        'label' => 'Statut',
+        'name' => 'state',
+        'selects' => [0 => 'privé', 1 => 'public'],
+        ]));
+
   }
 }

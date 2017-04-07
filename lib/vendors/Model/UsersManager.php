@@ -13,5 +13,5 @@ abstract class UsersManager extends Manager
    * @param $limite int Le nombre d'épisodes à sélectionner
    * @return array La liste des episodes. Chaque entrée est une instance de Episodes.
    */
-  abstract public function getAll();  
+  abstract public function checkConnexion($login, $password);  
 }

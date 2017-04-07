@@ -8,7 +8,7 @@ class UsersManagerPDO extends UsersManager
 {
 	public function add(Users $user)
 	{
-	    $requete = $this->dao->prepare('INSERT INTO users SET login = :login, password = :pass_sha1, email = :email, lastVisitDate = NOW(), inscriptionDate = NOW(), level = 1');
+	    $requete = $this->dao->prepare('INSERT INTO users SET login = :login, password = :pass_sha1, email = :email, lastVisitDate = NOW(), inscriptionDate = NOW(), permission = 1');
 	 
 	    $requete->bindValue(':login', $user->getLogin());
 	    $requete->bindValue(':pass_sha1', $user->getPassword());
@@ -21,25 +21,6 @@ class UsersManagerPDO extends UsersManager
 	    return false;
 	}
 
-	public function getAll()
-	{
-	    $requete = $this->dao->query('SELECT id, login, password, email, lastVisitDate, InscriptionDate, level FROM users ORDER BY id DESC');
-	    $requete->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Users');
-	 
-	    $listeUsers = $requete->fetchAll();
-	 
-	 	// Récupération des dates au format DateTime
-	    foreach ($listeUsers as $user)
-	    {
-	      $user->setLastVisitDate(new \DateTime($user->getLastVisitDate()));
-	      $user->setInscriptionDate(new \DateTime($user->getInscriptionDate()));
-	    }
-	 
-	    $requete->closeCursor();
-	 
-	    return $listeUsers;
-	}
-
 	public function loginExists($login)
 	{
 		$requete = $this->dao->prepare('SELECT login FROM users WHERE login = "' . $login .'"');
@@ -50,16 +31,18 @@ class UsersManagerPDO extends UsersManager
 
 	public function checkConnexion($login, $password)
 	{
-		$requete = $this->dao->prepare('SELECT login FROM users WHERE login = :login AND password = :password');
+		$requete = $this->dao->prepare('SELECT * FROM users WHERE login = :login AND password = :password');
 		$requete->bindValue(':login', $login);
 		$requete->bindValue(':password', $password);
 
 	    $requete->execute();
 	 
-	    /*$requete->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Users');*/
+	    $requete->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Users');
 	 
-	    if ($requete->fetch())
+	    if ($user = $requete->fetch())
 	    {
+	    	$user->setAttribute('permission', $user->getPermission());
+	    	$this->dao->prepare('UPDATE users SET  lastVisitDate = NOW() WHERE login ="'.$login.'"')->execute();
 	    	return true;
 	    }
 	 

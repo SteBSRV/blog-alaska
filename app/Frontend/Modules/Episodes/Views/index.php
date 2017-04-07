@@ -1,4 +1,5 @@
 <?php
+//var_dump($_SESSION);
 echo '<h1 class="post-heading">Liste des episodes</h1>';
 foreach ($listeEpisodes as $episodes)
 {

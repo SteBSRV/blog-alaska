@@ -13,7 +13,7 @@ class Users extends Entity
             $email,
             $lastVisitDate,
             $inscriptionDate,
-            $level,
+            $permission,
             $state;
  
   const INVALID_LOGIN = 1;
@@ -90,7 +90,7 @@ class Users extends Entity
       $this->errors[] = self::INVALID_PASSWORD;
     }
  
-    $this->password = sha1('ser', $password);
+    $this->password = sha1($password);
   }
  
   public function setEmail($email)
@@ -113,9 +113,10 @@ class Users extends Entity
     $this->inscriptionDate = $inscriptionDate;
   }
 
-  public function setLevel($level)
+  public function setPermission($permission)
   {
-    $this->level = (int)$level;
+    // Utilisation des opétateurs de bits pour gérer les permissions.
+    $this->permission = (int)$permission;
   }
 
   public function setState($state)
@@ -150,9 +151,9 @@ class Users extends Entity
     return $this->inscriptionDate;
   }
 
-  public function getLevel()
+  public function getPermission()
   {
-    return $this->level;
+    return $this->permission;
   }
 
   public function getState()

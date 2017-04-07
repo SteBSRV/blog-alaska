@@ -10,7 +10,8 @@ class Episodes extends Entity
             $title,
             $content,
             $addDate,
-            $modDate;
+            $modDate,
+            $state;
  
   const INVALID_AUTHOR = 1;
   const INVALID_TITLE = 2;
@@ -63,6 +64,11 @@ class Episodes extends Entity
   {
     $this->modDate = $modDate;
   }
+
+  public function setState($state)
+  {
+    $this->state = $state;
+  }
  
   // GETTERS //
  
@@ -89,5 +95,10 @@ class Episodes extends Entity
   public function getModDate()
   {
     return $this->modDate;
+  }
+
+  public function getState()
+  {
+    return $this->state;
   }
 }

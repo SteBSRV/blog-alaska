@@ -25,6 +25,11 @@ class StringField extends Field
     {
       $widget .= ' maxlength="'.$this->maxLength.'"';
     }
+
+    if (!empty($this->readonly))
+    {
+      $widget .= ' readonly="readonly"';
+    }
  
     return $widget .= ' />';
   }

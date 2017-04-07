@@ -10,6 +10,8 @@ abstract class Field
   protected $name;
   protected $validators = [];
   protected $value;
+  protected $selects = []; 
+  protected $readonly;
  
   public function __construct(array $options = [])
   {
@@ -59,6 +61,16 @@ abstract class Field
   {
     return $this->value;
   }
+
+  public function selects()
+  {
+    return $this->selects;
+  }
+
+  public function readonly()
+  {
+    return $this->readonly;
+  }
  
   public function setLabel($label)
   {
@@ -102,6 +114,22 @@ abstract class Field
     if (is_string($value))
     {
       $this->value = $value;
+    }
+  }
+
+  public function setSelects($selects)
+  {
+    if (is_array($selects))
+    {
+      $this->selects = $selects;
+    }
+  }
+
+  public function setReadonly($readonly)
+  {
+    if (isset($readonly))
+    {
+      $this->readonly = $readonly;
     }
   }
 }

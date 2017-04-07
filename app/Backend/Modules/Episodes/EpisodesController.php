@@ -38,7 +38,7 @@ class EpisodesController extends BackController
  
     $manager = $this->managers->getManagerOf('Episodes');
  
-    $this->page->addVar('listeEpisodes', $manager->getList());
+    $this->page->addVar('listeEpisodes', $manager->getListAdmin());
     $this->page->addVar('nombreEpisodes', $manager->count());
   }
  
@@ -97,7 +97,8 @@ class EpisodesController extends BackController
       $episode = new Episodes([
         'author' => $request->postData('author'),
         'title' => $request->postData('title'),
-        'content' => $request->postData('content')
+        'content' => $request->postData('content'),
+        'state' => $request->postData('state')
       ]);
  
       if ($request->getExists('id'))
