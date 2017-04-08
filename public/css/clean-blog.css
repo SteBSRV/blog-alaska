@@ -422,3 +422,7 @@ body {
 .level-3 {
   margin-left: 200px !important;
 }
+
+.private-episode {
+  color: orange;
+}

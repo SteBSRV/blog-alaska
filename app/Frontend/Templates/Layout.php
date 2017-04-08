@@ -52,25 +52,35 @@
                         <?php foreach ($listeEpisodesMenu as $episode) {
                             $title = $episode->getTitle();
                             $id = $episode->getId();
-                            echo '<li><a href="/episode-' . $id . '.html">Episode ' . $title . '</a></li>';
+                            echo '<li><a href="/episode-' . $id . '.html">' . $title . '</a></li>';
                         }
                         ?>
                       </ul>
                     </li>
                     <li>
+                        <a href="/a-propos/">A propos</a>
+                    </li>
+                    <li>
                         <a href="/contact/">Contact</a>
                     </li>
-                    <?php if ($user->isAuthenticated() === false) { ?>
-                    <li>
-                        <a href="/admin/login/">Connexion</a>
-                    </li>
-                    <li>
-                        <a href="/signin/">Inscription</a>
-                    </li>
-                    <?php }
+                    <?php
                     if ($user->isAuthenticated()) { ?>
-                    <li>
-                        <a href="/admin/">Admin</a>
+                    <li class="dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administration<span class="caret"></span></a>
+                      <ul class="dropdown-menu">
+                          <li>
+                            <a href="/admin/">Gestion épisodes</a>
+                          </li>
+                          <li>
+                            <a href="/admin/episode-insert.html">Rédiger un épisode</a>
+                          </li>
+                          <li>
+                            <a href="/admin/commentaires/">Gestion commentaires</a>
+                          </li>
+                          <li>
+                            <a href="/admin/parametres/">Paramètres</a>
+                          </li>      
+                      </ul>
                     </li>
                     <li>
                         <a href="/admin/logout/">Déconnexion <em>(<?= $user->getAttribute('pseudo')?>)</em></a>
@@ -144,7 +154,12 @@
                             </a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted">Copyright &copy; BSPA 2017</p>
+                    <p class="copyright text-muted">Copyright &copy; BSPA 2017 - <?php if (!$user->isAuthenticated()) { ?>
+                        <a href="/admin/login/">Connexion</a>
+                        <?php } else { ?>
+                        <a href="/admin/logout/">Déconnexion</a>
+                        <?php } ?>
+                    </p>
                 </div>
             </div>
         </div>

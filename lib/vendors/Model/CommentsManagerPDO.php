@@ -36,19 +36,18 @@ class CommentsManagerPDO extends CommentsManager
     {
       throw new \InvalidArgumentException('L\'identifiant de l\'épisode passé doit être un nombre entier valide');
     }
- 
-    $q = $this->dao->prepare('SELECT id, author, message, date, state, level, parentId, episodeId FROM comments WHERE episodeId = :episode');
+    //SELECT * FROM comments WHERE episodeId = :episode GROUP BY CASE WHEN parentId IS NULL THEN id ELSE parentId END, parentId ASC
+    $q = $this->dao->prepare('SELECT * FROM comments WHERE episodeId = :episode ORDER BY COALESCE(parentId, id), parentId IS NOT NULL, id');
+
+    
     $q->bindValue(':episode', $episode, \PDO::PARAM_INT);
     $q->execute();
  
     $q->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Comment');
  
     $comments = $q->fetchAll();
- 
-    foreach ($comments as $comment)
-    {
-      $comment->setDate(new \DateTime($comment->getDate()));
-    }
+
+    $comments = $this->order($comments);
  
     return $comments;
   }
@@ -74,4 +73,32 @@ class CommentsManagerPDO extends CommentsManager
  
     return $q->fetch();
   }
+
+  public function order(array $comments)
+  {
+    $orderedComments = [];
+  
+    // A AMELIORER, uniquement pour test //
+    foreach ($comments as $Pcomment)
+    {
+      if(is_null($Pcomment->getParentId())) {
+        $Pcomment->setDate(new \DateTime($Pcomment->getDate()));
+        $orderedComments[] = $Pcomment;
+        foreach ($comments as $Ccomment) {
+          if ($Ccomment->getParentId() == $Pcomment->getId()) {
+            $Ccomment->setDate(new \DateTime($Ccomment->getDate()));
+            $orderedComments[] = $Ccomment;
+            foreach ($comments as $CCcomment) {
+              if ($CCcomment->getParentId() == $Ccomment->getId()) {
+                $CCcomment->setDate(new \DateTime($CCcomment->getDate()));
+                $orderedComments[] = $CCcomment;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    return $orderedComments;
+  }  
 }

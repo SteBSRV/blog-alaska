@@ -23,6 +23,11 @@ class EpisodesManagerPDO extends EpisodesManager
     return $this->dao->query('SELECT COUNT(*) FROM episodes WHERE state = 1')->fetchColumn();
   }
 
+  public function countAdmin()
+  {
+    return $this->dao->query('SELECT COUNT(*) FROM episodes')->fetchColumn();
+  }
+
   public function countComments($id)
   {
     return $this->dao->query('SELECT COUNT(*) FROM comments WHERE episodeId = ' . (int) $id)->fetchColumn();

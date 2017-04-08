@@ -13,4 +13,12 @@ class InformationsController extends BackController
     $this->page->addVar('title', 'Contact');
     $this->page->addVar('listeEpisodesMenu', $listeEpisodesMenu);
   }
+
+  public function executeAbout(HTTPRequest $request)
+  {
+  	$listeEpisodesMenu = $this->managers->getManagerOf('Episodes')->getList();
+
+    $this->page->addVar('title', 'A propos');
+    $this->page->addVar('listeEpisodesMenu', $listeEpisodesMenu);
+  }
 }

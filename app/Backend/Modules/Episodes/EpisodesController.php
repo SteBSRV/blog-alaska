@@ -40,7 +40,7 @@ class EpisodesController extends BackController
  
     $this->page->addVar('listeEpisodes', $manager->getListAdmin());
     $this->page->addVar('listeEpisodesMenu', $manager->getList());
-    $this->page->addVar('nombreEpisodes', $manager->count());
+    $this->page->addVar('nombreEpisodes', $manager->countAdmin());
   }
  
   public function executeInsert(HTTPRequest $request)

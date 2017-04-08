@@ -49,19 +49,24 @@ class EpisodesController extends BackController
  
   public function executeShow(HTTPRequest $request)
   {
-    $manager = $this->managers->getManagerOf('Episodes');
-    $episodes = $manager->getUnique($request->getData('id'));
+    $episodesManager = $this->managers->getManagerOf('Episodes');
+    $commentsManager = $this->managers->getManagerOf('Comments');
+    $episodes = $episodesManager->getUnique($request->getData('id'));
  
     if (empty($episodes))
     {
       $this->app->httpResponse()->redirect404();
     }
+
+    $comments = $commentsManager->getListOf($episodes->getId());
+    /*var_dump($comments);
+    die();*/
  
     $this->page->addVar('title', $episodes->getTitle());
     $this->page->addVar('episodes', $episodes);
-    $this->page->addVar('nbrComments', $manager->countComments($episodes->getId()));
-    $this->page->addVar('comments', $this->managers->getManagerOf('Comments')->getListOf($episodes->getId()));
-    $this->page->addVar('listeEpisodesMenu', $manager->getList());
+    $this->page->addVar('nbrComments', $episodesManager->countComments($episodes->getId()));
+    $this->page->addVar('comments', $comments);
+    $this->page->addVar('listeEpisodesMenu', $episodesManager->getList());
   }
  
   public function executeInsertComment(HTTPRequest $request)
@@ -145,6 +150,17 @@ class EpisodesController extends BackController
     $this->page->addVar('comment', $comment);
     $this->page->addVar('form', $form->createView());
     $this->page->addVar('title', 'Ajout d\'un commentaire');
+    $this->page->addVar('listeEpisodesMenu', $listeEpisodesMenu);
+  }
+
+  public function executeReportComment(HTTPRequest $request)
+  {
+    $comment = $request->getData('comment');
+
+    $listeEpisodesMenu = $this->managers->getManagerOf('Episodes')->getList();
+    
+    $this->page->addVar('comment', $comment);
+    $this->page->addVar('title', 'Signalement d\'un commentaire');
     $this->page->addVar('listeEpisodesMenu', $listeEpisodesMenu);
   }
 }

@@ -6,5 +6,7 @@
   <route url="/episode-([0-9]+)\.html" module="Episodes" action="show" vars="id"/>
   <route url="/commenter-([0-9]+)\.html" module="Episodes" action="insertComment" vars="episodes" />
   <route url="/commenter-reponse-([0-9]+)\.html" module="Episodes" action="responseComment" vars="comment" />
+  <route url="/comment-report-([0-9]+)\.html" module="Episodes" action="reportComment" vars="comment" />
   <route url="/contact/" module="Informations" action="contact"/>
+  <route url="/a-propos/" module="Informations" action="about"/>
 </routes>

@@ -9,7 +9,7 @@ class Comment extends Entity
             $message,
             $date,
             $state,
-            $parentId,
+            $parentId = NULL,
             $level = 1,
             $episodeId;
  
