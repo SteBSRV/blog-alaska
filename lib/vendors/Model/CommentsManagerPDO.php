@@ -36,11 +36,25 @@ class CommentsManagerPDO extends CommentsManager
     {
       throw new \InvalidArgumentException('L\'identifiant de l\'épisode passé doit être un nombre entier valide');
     }
-    //SELECT * FROM comments WHERE episodeId = :episode GROUP BY CASE WHEN parentId IS NULL THEN id ELSE parentId END, parentId ASC
     $q = $this->dao->prepare('SELECT * FROM comments WHERE episodeId = :episode ORDER BY COALESCE(parentId, id), parentId IS NOT NULL, id');
 
     
     $q->bindValue(':episode', $episode, \PDO::PARAM_INT);
+    $q->execute();
+ 
+    $q->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Comment');
+ 
+    $comments = $q->fetchAll();
+
+    $comments = $this->order($comments);
+ 
+    return $comments;
+  }
+
+  public function getReported()
+  {
+    $q = $this->dao->prepare('SELECT * FROM comments WHERE state=0 ORDER BY id DESC');
+
     $q->execute();
  
     $q->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Comment');

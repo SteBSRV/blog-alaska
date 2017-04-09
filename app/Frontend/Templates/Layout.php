@@ -112,11 +112,15 @@
     <!-- Main Content -->
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-              <?php if ($user->hasFlash()) echo '<p style="text-align: center;">', $user->getFlash(), '</p>'; ?>
-                <?php
-                  echo $content;
-                ?>
+            <div class="col-xs-12">
+              <?php if ($user->hasFlash()) 
+                    { ?>
+                        <div class="alert alert-info" role="alert"><p class="flash-message"><?= $user->getFlash()?></p></div>
+                    <?php
+                    }
+
+                echo $content;
+            ?>
             </div>
         </div>
     </div>

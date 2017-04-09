@@ -11,7 +11,8 @@ class Comment extends Entity
             $state,
             $parentId = NULL,
             $level = 1,
-            $episodeId;
+            $episodeId,
+            $report = 0;
  
   const INVALID_AUTHOR = 1;
   const INVALID_MESSAGE = 2;
@@ -75,6 +76,11 @@ class Comment extends Entity
       $this->level = $level;
     }
   }
+
+  public function setReport($report)
+  {
+    $this->report = $report;
+  }
  
   // GETTERS //
 
@@ -111,5 +117,13 @@ class Comment extends Entity
   public function getLevel()
   {
     return $this->level;
+  }
+
+  public function getReport()
+  {
+    if ($this->report == 0) {
+      return false;
+    }
+    return $this->report;
   }
 }

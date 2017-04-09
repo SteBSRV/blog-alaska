@@ -1,22 +1,28 @@
 <?php
-//var_dump($_SESSION);
-echo '<h1 class="post-heading">Liste des episodes</h1>';
-foreach ($listeEpisodes as $episodes)
-{
-?>
-<div class="post-preview">
-    <?php echo '<a href="episode-'.$episodes->getId().'.html">'?>
-        <h2 class="post-title">
-            <?php echo $episodes->getTitle();?>
-        </h2>
-            <?php echo strip_tags($episodes->getContent());?>
-    </a>
-    <p class="post-meta">
-    	Posté par <?php echo $episodes->getAuthor()?>, le <?php echo $episodes->getAddDate()->format('d/m/Y à H\hi')?>
-    </p>
-</div>
+
+echo '<h1 class="post-heading">Liste des episodes</h1>';?>
+<div class="content-list">
+    <?php
+    foreach ($listeEpisodes as $episodes)
+    {
+    ?>
+    <div class="post-preview col-xs-12 col-md-6">
+        <?php echo '<a href="episode-'.$episodes->getId().'.html">'?>
+            <h2 class="post-title">
+                <?php echo $episodes->getTitle();?>
+            </h2>
+                <?php echo strip_tags($episodes->getContent());?>
+        </a>
+        <p class="post-meta">
+        	Posté par <?php echo $episodes->getAuthor()?>, le <?php echo $episodes->getAddDate()->format('d/m/Y à H\hi')?>
+        </p>
+    </div>
 <?php
 }
+?>
+</div>
+</div>
+<?php
 /* Pager */
 if ($page < $nbrPages) {?>
     <hr>

@@ -4,7 +4,7 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
 body {
-  font-family: 'Lora', 'Times New Roman', serif;
+  font-family: 'Open Sans', 'Helvetica Neue', serif;
   font-size: 20px;
   color: #333333;
 }
@@ -424,5 +424,54 @@ body {
 }
 
 .private-episode {
-  color: orange;
+  background-color: lightgrey;
+}
+
+table {
+  border: 1px solid black;
+}
+thead {
+  background-color: #777777;
+  color: white;
+}
+tbody tr:hover {
+  background-color: #0085A1;
+  color: white;
+}
+td a:hover{
+  color: white;
+}
+
+.btn-primary {
+  background-color: #0085A1;
+  border-color: #0085A1;
+}
+
+.flash-message {
+  text-align: center;
+}
+
+.comment-empty{
+  font-style: italic;
+  text-align: right;
+}
+.comment-body{
+  margin-bottom: 20px;
+}
+.comment-author{
+  font-weight: bold;
+}
+.comment-message{
+  background-color: #F5F5F5;
+  margin: 0;
+  padding: 0;
+  border-radius: 10px;
+}
+.comment-message p{
+  margin: 0;
+  padding: 10px;
+}
+.comment-footer{
+  padding: 4px;
+  font-size: small;
 }
