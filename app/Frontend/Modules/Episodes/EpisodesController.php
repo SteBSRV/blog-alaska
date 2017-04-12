@@ -5,8 +5,10 @@ namespace App\Frontend\Modules\Episodes;
 use \SER\BSPA\BackController;
 use \SER\BSPA\HTTPRequest;
 use \Entity\Comment;
+use \SERMailer\SERMailer;
 use \FormBuilder\CommentFormBuilder;
 use \SER\BSPA\Form\FormHandler;
+use \RSSParser\RSSParser;
  
 class EpisodesController extends BackController
 {
@@ -40,7 +42,11 @@ class EpisodesController extends BackController
         $episodes->setContent($debut);
       }
     }
+
+    // On ajoute les informations relatives au flux RSS
+    $rss = '<link rel="alternate" type="application/rss+xml" href="http://bspa.dev/flux.xml" />';
     // On ajoute les variables à la vue.
+    $this->page->addVar('rss', $rss);
     $this->page->addVar('listeEpisodes', $listeEpisodes);
     $this->page->addVar('nbrPages', $nbrPages);
     $this->page->addVar('page', $page);
@@ -155,12 +161,50 @@ class EpisodesController extends BackController
 
   public function executeReportComment(HTTPRequest $request)
   {
-    $comment = $request->getData('comment');
+    $commentId = $request->getData('comment');
 
-    $listeEpisodesMenu = $this->managers->getManagerOf('Episodes')->getList();
+    $episodesManager = $this->managers->getManagerOf('Episodes');
+    $commentsManager = $this->managers->getManagerOf('Comments');
+    $listeEpisodesMenu = $episodesManager->getList();
+
+    $comment = $commentsManager->get($commentId);
+    $parentComment = $commentsManager->get($comment->getParentId());
+    $episode = $episodesManager->getUnique($comment->getEpisodeId());
+
+    $comment->setReport(($comment->getReport()) + 1);
+    $commentsManager->save($comment);
+
+    /*
+    $message_mail = '<h1>Signalement du commentaire de <strong>'.$comment->getAuthor().'</strong></h1>';
+    if ($parentComment != false) {
+    $message_mail .= '<h2><em>En réponse au commentaire de '.$parentComment->getAuthor().'</em></h2>';
+    }
+    $message_mail .= '';
+    $message_mail .= '<p>Contenu du commentaire :';
+    $message_mail .= '';
+    $message_mail .= '"<em>'.$comment->getMessage().'</em>"</p>';
+    $message_mail .= '<span>Le '.$comment->getDate().'.</span>';
+    $message_mail .= '';
+    $message_mail .= '<p>Episode concerné : '.$episode->getTitle().'.</p>';
+    $message_mail .= '';
+    $message_mail .= '<p>Censurer le commentaire : <a href="bspa.dev/admin/>Censurer</a></p>';
+
+    $mail = new SERMailer('ebizetsteve@gmail.com', 'Signalement d\'un commentaire', $message_mail);
+    $mail->send();*/
     
-    $this->page->addVar('comment', $comment);
+    $this->page->addVar('comment', $commentId);
     $this->page->addVar('title', 'Signalement d\'un commentaire');
     $this->page->addVar('listeEpisodesMenu', $listeEpisodesMenu);
+  }
+
+  public function executeRss(HTTPRequest $request)
+  {
+    $listeEpisodes = $this->managers->getManagerOf('Episodes')->getList();
+
+    $this->page->addVar('listeEpisodesMenu', $listeEpisodes);
+
+    $rss = new RSSParser($listeEpisodes);
+
+    $this->app->httpResponse()->redirect($rss->getRss());
   }
 }

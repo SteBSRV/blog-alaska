@@ -3,6 +3,7 @@
 namespace Entity;
  
 use \SER\BSPA\Entity;
+use \Model\UsersManagerPDO;
 
 session_start();
  
@@ -58,11 +59,11 @@ class Users extends Entity
  
     $_SESSION['auth'] = $authenticated;
 
-    if (!$authenticated) {
+    /*if (!$authenticated) {
       $_SESSION = [];
       session_destroy();
       // Cookie
-    }
+    }*/
   }
  
   public function setFlash($value)

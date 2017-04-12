@@ -12,6 +12,7 @@
     <title>
       <?= isset($title) ? $title : "Billet Simple Pour l'Alaska" ?>
     </title>
+    <?= isset($rss) ? $rss : ''?>
 
     <!-- Bootstrap Core CSS -->
     <link href="/../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
@@ -163,6 +164,8 @@
                         <?php } else { ?>
                         <a href="/admin/logout/">Déconnexion</a>
                         <?php } ?>
+                        - 
+                        <a href="/flux.rss">Flux RSS</a>  
                     </p>
                 </div>
             </div>

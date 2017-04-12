@@ -23,6 +23,11 @@ $entityLoader->register();
 $formLoader = new SplClassLoader('FormBuilder', __DIR__.'/../lib/vendors');
 $formLoader->register();
 
+$formLoader = new SplClassLoader('SERMailer', __DIR__.'/../lib/vendors');
+$formLoader->register();
+
+$formLoader = new SplClassLoader('RSSParser', __DIR__.'/../lib/vendors');
+$formLoader->register();
 
 $appClass = 'App\\'.$_GET['app'].'\\'.$_GET['app'].'Application';
  

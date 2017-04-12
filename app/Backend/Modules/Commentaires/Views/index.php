@@ -10,6 +10,7 @@
   			<th>Date</th>
   			<th>Status</th>
   			<th>(Signalement)</th>
+  			<th>Episode</th>
   			<th>Action</th>
   		</tr>
   	</thead>
@@ -22,8 +23,9 @@
 				<td><?=$comment->getAuthor()?></td>
 				<td><?=$comment->getMessage()?></td>
 				<td>le <?=$comment->getDate()->format('d/m/Y à H\hi')?></td>
-				<td><?=$comment->getState() ? 'public' : 'signalé'?></td>
-				<td><?=$comment->getReport() ? $comment->getReport() : 'aucun'?></td>
+				<td><?=$comment->getState() ? 'public' : 'censuré'?></td>
+				<td><?=($comment->getReport() == 0) ? 'aucun' : $comment->getReport()?></td>
+				<td><?=$comment->getEpisodeId()?></td>
 				<td><a href="/admin/comment-update-<?=$comment->getId()?>.html"><i class="fa fa-edit"></i></a> <a href="/admin/comment-delete-<?=$comment->getId()?>.html"><i class="fa fa-trash"></i></a></td>
 			</tr>
 		<?php

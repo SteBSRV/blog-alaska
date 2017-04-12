@@ -9,4 +9,5 @@
   <route url="/comment-report-([0-9]+)\.html" module="Episodes" action="reportComment" vars="comment" />
   <route url="/contact/" module="Informations" action="contact"/>
   <route url="/a-propos/" module="Informations" action="about"/>
+  <route url="/flux.rss" module="Episodes" action="rss"/>
 </routes>

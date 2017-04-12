@@ -8,7 +8,7 @@ class Comment extends Entity
   protected $author,
             $message,
             $date,
-            $state,
+            $state = 1,
             $parentId = NULL,
             $level = 1,
             $episodeId,
@@ -23,6 +23,12 @@ class Comment extends Entity
   public function isValid()
   {
     return !(empty($this->author) || empty($this->message));
+  }
+
+  public function censured()
+  {
+    $this->state = 0;
+    $this->message = '"Message censuré en raison de plusieurs signalement" (Modération BSPA)';
   }
 
   // SETTERS //
@@ -80,6 +86,10 @@ class Comment extends Entity
   public function setReport($report)
   {
     $this->report = $report;
+
+    if ($this->report >= 5) {
+      $this->censured();
+    }
   }
  
   // GETTERS //
@@ -121,9 +131,6 @@ class Comment extends Entity
 
   public function getReport()
   {
-    if ($this->report == 0) {
-      return false;
-    }
     return $this->report;
   }
 }

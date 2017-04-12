@@ -68,24 +68,28 @@ class CommentsManagerPDO extends CommentsManager
  
   protected function modify(Comment $comment)
   {
-    $q = $this->dao->prepare('UPDATE comments SET author = :author, message = :message WHERE id = :id');
+    $q = $this->dao->prepare('UPDATE comments SET author = :author, message = :message, report = :report, state = :state WHERE id = :id');
  
     $q->bindValue(':author', $comment->getAuthor());
     $q->bindValue(':message', $comment->getMessage());
+    $q->bindValue(':state', $comment->getState(), \PDO::PARAM_INT);
+    $q->bindValue(':report', $comment->getReport(), \PDO::PARAM_INT);
     $q->bindValue(':id', $comment->getId(), \PDO::PARAM_INT);
- 
+
     $q->execute();
   }
  
   public function get($id)
   {
-    $q = $this->dao->prepare('SELECT id, author, message, date, state, parentId, level, episodeId FROM comments WHERE id = :id');
+    $q = $this->dao->prepare('SELECT id, author, message, date, state, parentId, level, episodeId, report FROM comments WHERE id = :id');
     $q->bindValue(':id', (int) $id, \PDO::PARAM_INT);
     $q->execute();
  
     $q->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Comment');
+
+    $comment = $q->fetch();
  
-    return $q->fetch();
+    return $comment;
   }
 
   public function order(array $comments)

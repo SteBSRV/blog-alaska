@@ -14,6 +14,13 @@ class FrontendApplication extends Application
  
   public function run()
   {
+    if ($this->httpRequest->cookieExists('login'))
+    {
+      $login = $_COOKIE['login'];
+      $password = $_COOKIE['password'];
+      // Check connexion
+      
+    }
     $controller = $this->getController();
     $controller->execute();
  
