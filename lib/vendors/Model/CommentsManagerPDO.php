@@ -58,7 +58,7 @@ class CommentsManagerPDO extends CommentsManager
 
   public function getReported()
   {
-    $q = $this->dao->prepare('SELECT * FROM comments WHERE state=0 ORDER BY id DESC');
+    $q = $this->dao->prepare('SELECT * FROM comments WHERE report >= 1 ORDER BY id DESC');
 
     $q->execute();
  

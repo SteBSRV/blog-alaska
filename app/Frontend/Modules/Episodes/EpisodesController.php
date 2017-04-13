@@ -176,23 +176,12 @@ class EpisodesController extends BackController
     $comment->setReport(($comment->getReport()) + 1);
     $this->comManager->save($comment);
 
-    /*
-    $message_mail = '<h1>Signalement du commentaire de <strong>'.$comment->getAuthor().'</strong></h1>';
-    if ($parentComment != false) {
-    $message_mail .= '<h2><em>En réponse au commentaire de '.$parentComment->getAuthor().'</em></h2>';
-    }
-    $message_mail .= '';
-    $message_mail .= '<p>Contenu du commentaire :';
-    $message_mail .= '';
-    $message_mail .= '"<em>'.$comment->getMessage().'</em>"</p>';
-    $message_mail .= '<span>Le '.$comment->getDate().'.</span>';
-    $message_mail .= '';
-    $message_mail .= '<p>Episode concerné : '.$episode->getTitle().'.</p>';
-    $message_mail .= '';
-    $message_mail .= '<p>Censurer le commentaire : <a href="bspa.dev/admin/>Censurer</a></p>';
-
-    $mail = new SERMailer('ebizetsteve@gmail.com', 'Signalement d\'un commentaire', $message_mail);
-    $mail->send();*/
+    $mail = new SERMailer('ebizetsteve@gmail.com', 'Signalement d\'un commentaire');
+    $mail->addVar('comment', $comment);
+    $mail->addVar('parentComment', $parentComment);
+    $mail->addVar('episode', $episode);
+    $mail->generateContent();
+    $mail->send();
     
     $this->page->addVar('comment', $commentId);
     $this->page->addVar('title', 'Signalement d\'un commentaire');

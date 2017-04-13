@@ -6,6 +6,7 @@ class SERMailer
 {
 	protected $boundary,
 			  $passage_ligne,
+			  $vars = [],
 			  $mail,
 			  $sujet,
 			  $message,
@@ -17,13 +18,32 @@ class SERMailer
 	const INVALID_SUBJECT = 2;
 	const INDALID_MESSAGE = 3;
 
-	public function __construct($mail, $subject, $content)
+	public function __construct($mail, $subject)
 	{
 		$this->boundary = "-----=".md5(rand());
 		$this->mail = $mail;
 		$this->subject = $subject;
-		$this->content_html = $content;
-		$this->content_txt = strip_tags($content);
+	}
+
+	public function addVar($var, $value)
+    {
+	    if (!is_string($var) || is_numeric($var) || empty($var))
+	    {
+	      throw new \InvalidArgumentException('Le nom de la variable doit être une chaine de caractères non nulle');
+    }
+ 
+    $this->vars[$var] = $value;
+  }
+
+	public function generateContent()
+	{
+		extract($this->vars);
+ 
+	    ob_start();
+		require __DIR__.'/Templates/layout.php';
+		$this->content_html = ob_get_clean();
+		$this->content_txt = strip_tags($this->content_html);
+
 		$this->createMail();
 	}
 
@@ -95,8 +115,6 @@ class SERMailer
 		if (!isset($this->message)) {
 			throw new Exception("Le message n'est pas valide.", INVALID_MESSAGE);
 		}
-
-		var_dump($this->message . '#######' . $this->header);
 
 		mail($this->mail, $this->subject, $this->message, $this->header);
  	}
