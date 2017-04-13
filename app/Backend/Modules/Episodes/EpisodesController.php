@@ -11,12 +11,29 @@ use \SER\BSPA\Form\FormHandler;
  
 class EpisodesController extends BackController
 {
+  protected $epiManager,
+            $comManager,
+            $nbReport,
+            $listEpisodes;
+
+  public function loadData()
+  {
+    $this->epiManager = $this->managers->getManagerOf('Episodes');
+    $this->comManager = $this->managers->getManagerOf('Comments');
+    $this->nbReport = $this->comManager->countReport();
+    $this->listEpisodes = $this->epiManager->getList();
+
+    $this->page->addVar('listeEpisodesMenu', $this->listEpisodes);
+    $this->page->addVar('nbReport', $this->nbReport);
+  }
+
   public function executeDelete(HTTPRequest $request)
   {
+    $this->loadData();
     $episodeId = $request->getData('id');
  
-    $this->managers->getManagerOf('Comments')->deleteFromEpisode($episodeId);
-    $this->managers->getManagerOf('Episodes')->delete($episodeId);
+    $this->comManager->deleteFromEpisode($episodeId);
+    $this->epiManager->delete($episodeId);
  
     $this->app->user()->setFlash('L\'épisode a bien été supprimée !');
  
@@ -27,17 +44,16 @@ class EpisodesController extends BackController
  
   public function executeIndex(HTTPRequest $request)
   {
+    $this->loadData();
     $this->page->addVar('title', 'Gestion des épisodes');
  
-    $manager = $this->managers->getManagerOf('Episodes');
- 
-    $this->page->addVar('listeEpisodes', $manager->getListAdmin());
-    $this->page->addVar('listeEpisodesMenu', $manager->getList());
-    $this->page->addVar('nombreEpisodes', $manager->countAdmin());
+    $this->page->addVar('listeEpisodes', $this->epiManager->getListAdmin());
+    $this->page->addVar('nombreEpisodes', $this->epiManager->countAdmin());
   }
  
   public function executeInsert(HTTPRequest $request)
   {
+    $this->loadData();
     $this->processForm($request);
  
     $this->page->addVar('title', 'Ajout d\'un épisode');
@@ -45,6 +61,7 @@ class EpisodesController extends BackController
  
   public function executeUpdate(HTTPRequest $request)
   {
+    $this->loadData();
     $this->processForm($request);
  
     $this->page->addVar('title', 'Modification d\'un épisode');
@@ -52,6 +69,7 @@ class EpisodesController extends BackController
  
   public function processForm(HTTPRequest $request)
   {
+    $this->loadData();
     if ($request->method() == 'POST')
     {
       $episode = new Episodes([
@@ -71,7 +89,7 @@ class EpisodesController extends BackController
       // L'identifiant de l'épisode est transmis si on veut la modifier
       if ($request->getExists('id'))
       {
-        $episode = $this->managers->getManagerOf('Episodes')->getUnique($request->getData('id'));
+        $episode = $this->epiManager->getUnique($request->getData('id'));
       }
       else
       {
@@ -84,7 +102,7 @@ class EpisodesController extends BackController
  
     $form = $formBuilder->form();
  
-    $formHandler = new FormHandler($form, $this->managers->getManagerOf('Episodes'), $request);
+    $formHandler = new FormHandler($form, $this->epiManager, $request);
  
     if ($formHandler->process())
     {

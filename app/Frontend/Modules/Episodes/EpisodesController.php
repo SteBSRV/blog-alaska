@@ -12,34 +12,48 @@ use \RSSParser\RSSParser;
  
 class EpisodesController extends BackController
 {
+  protected $epiManager,
+            $comManager,
+            $nbReport,
+            $listEpisodes;
+
+  public function loadData()
+  {
+    $this->epiManager = $this->managers->getManagerOf('Episodes');
+    $this->comManager = $this->managers->getManagerOf('Comments');
+    $this->nbReport = $this->comManager->countReport();
+    $this->listEpisodes = $this->epiManager->getList();
+
+    $this->page->addVar('listeEpisodesMenu', $this->listEpisodes);
+    $this->page->addVar('nbReport', $this->nbReport);
+  }
+
   public function executeIndex(HTTPRequest $request)
   {
+    $this->loadData();
     $nombreEpisodes = $this->app->config()->get('nombre_episodes');
     $nombreCaracteres = $this->app->config()->get('nombre_caracteres');
  
     // On ajoute une définition pour le titre.
     $this->page->addVar('title', 'Liste des '.$nombreEpisodes.' derniers épisodes');
- 
-    // On récupère le manager des épisodes.
-    $manager = $this->managers->getManagerOf('Episodes');
 
     // Pagination automatique :
     $page = $request->getData('page');
-    $nbrPages = ceil($manager->count() / $nombreEpisodes);
+    $nbrPages = ceil($this->epiManager->count() / $nombreEpisodes);
     if (is_null($page)) $page = 1;
     $listStart = ($page - 1) * $nombreEpisodes;
  
-    $listeEpisodes = $manager->getList($listStart, $nombreEpisodes);
+    $listeEpisodes = $this->epiManager->getList($listStart, $nombreEpisodes);
  
     // "Lire la suite[...]"
-    foreach ($listeEpisodes as $episodes)
+    foreach ($listeEpisodes as $episode)
     {
-      if (strlen($episodes->getContent()) > $nombreCaracteres)
+      if (strlen($episode->getContent()) > $nombreCaracteres)
       {
-        $debut = substr($episodes->getContent(), 0, $nombreCaracteres);
+        $debut = substr($episode->getContent(), 0, $nombreCaracteres);
         $debut = substr($debut, 0, strrpos($debut, ' ')) . '...';
  
-        $episodes->setContent($debut);
+        $episode->setContent($debut);
       }
     }
 
@@ -50,33 +64,30 @@ class EpisodesController extends BackController
     $this->page->addVar('listeEpisodes', $listeEpisodes);
     $this->page->addVar('nbrPages', $nbrPages);
     $this->page->addVar('page', $page);
-    $this->page->addVar('listeEpisodesMenu', $manager->getList());
   }
  
   public function executeShow(HTTPRequest $request)
   {
-    $episodesManager = $this->managers->getManagerOf('Episodes');
-    $commentsManager = $this->managers->getManagerOf('Comments');
-    $episodes = $episodesManager->getUnique($request->getData('id'));
+    $this->loadData();
+    
+    $episodes = $this->epiManager->getUnique($request->getData('id'));
  
     if (empty($episodes))
     {
       $this->app->httpResponse()->redirect404();
     }
 
-    $comments = $commentsManager->getListOf($episodes->getId());
-    /*var_dump($comments);
-    die();*/
+    $comments = $this->comManager->getListOf($episodes->getId());
  
     $this->page->addVar('title', $episodes->getTitle());
     $this->page->addVar('episodes', $episodes);
-    $this->page->addVar('nbrComments', $episodesManager->countComments($episodes->getId()));
+    $this->page->addVar('nbrComments', $this->epiManager->countComments($episodes->getId()));
     $this->page->addVar('comments', $comments);
-    $this->page->addVar('listeEpisodesMenu', $episodesManager->getList());
   }
  
   public function executeInsertComment(HTTPRequest $request)
   {
+    $this->loadData();
     // Si le formulaire a été envoyé.
     if ($request->method() == 'POST')
     {
@@ -96,9 +107,7 @@ class EpisodesController extends BackController
  
     $form = $formBuilder->form();
  
-    $formHandler = new FormHandler($form, $this->managers->getManagerOf('Comments'), $request);
-
-    $listeEpisodesMenu = $this->managers->getManagerOf('Episodes')->getList();
+    $formHandler = new FormHandler($form, $this->comManager, $request);
  
     if ($formHandler->process())
     {
@@ -110,11 +119,11 @@ class EpisodesController extends BackController
     $this->page->addVar('comment', $comment);
     $this->page->addVar('form', $form->createView());
     $this->page->addVar('title', 'Ajout d\'un commentaire');
-    $this->page->addVar('listeEpisodesMenu', $listeEpisodesMenu);
   }
 
   public function executeResponseComment(HTTPRequest $request)
   {
+    $this->loadData();
     // Si le formulaire a été envoyé.
     if ($request->method() == 'POST')
     {
@@ -130,11 +139,10 @@ class EpisodesController extends BackController
     }
 
     $parentId = $request->getData('comment');
-    $manager = $this->managers->getManagerOf('Comments');
-    $episode = $manager->get($parentId)->getEpisodeId();
-    $comment->setEpisodeId($episode);
+    $episodeId = $this->comManager->get($parentId)->getEpisodeId();
+    $comment->setEpisodeId($episodeId);
 
-    $level = ($manager->get($parentId)->getLevel()) + 1;
+    $level = ($this->comManager->get($parentId)->getLevel()) + 1;
     $comment->setLevel($level);
  
     $formBuilder = new CommentFormBuilder($comment);
@@ -142,9 +150,7 @@ class EpisodesController extends BackController
  
     $form = $formBuilder->form();
  
-    $formHandler = new FormHandler($form, $manager, $request);
-
-    $listeEpisodesMenu = $this->managers->getManagerOf('Episodes')->getList();
+    $formHandler = new FormHandler($form, $this->comManager, $request);
  
     if ($formHandler->process())
     {
@@ -156,23 +162,19 @@ class EpisodesController extends BackController
     $this->page->addVar('comment', $comment);
     $this->page->addVar('form', $form->createView());
     $this->page->addVar('title', 'Ajout d\'un commentaire');
-    $this->page->addVar('listeEpisodesMenu', $listeEpisodesMenu);
   }
 
   public function executeReportComment(HTTPRequest $request)
   {
+    $this->loadData();
     $commentId = $request->getData('comment');
 
-    $episodesManager = $this->managers->getManagerOf('Episodes');
-    $commentsManager = $this->managers->getManagerOf('Comments');
-    $listeEpisodesMenu = $episodesManager->getList();
-
-    $comment = $commentsManager->get($commentId);
-    $parentComment = $commentsManager->get($comment->getParentId());
-    $episode = $episodesManager->getUnique($comment->getEpisodeId());
+    $comment = $this->comManager->get($commentId);
+    $parentComment = $this->comManager->get($comment->getParentId());
+    $episode = $this->epiManager->getUnique($comment->getEpisodeId());
 
     $comment->setReport(($comment->getReport()) + 1);
-    $commentsManager->save($comment);
+    $this->comManager->save($comment);
 
     /*
     $message_mail = '<h1>Signalement du commentaire de <strong>'.$comment->getAuthor().'</strong></h1>';
@@ -194,14 +196,11 @@ class EpisodesController extends BackController
     
     $this->page->addVar('comment', $commentId);
     $this->page->addVar('title', 'Signalement d\'un commentaire');
-    $this->page->addVar('listeEpisodesMenu', $listeEpisodesMenu);
   }
 
   public function executeRss(HTTPRequest $request)
   {
     $listeEpisodes = $this->managers->getManagerOf('Episodes')->getList();
-
-    $this->page->addVar('listeEpisodesMenu', $listeEpisodes);
 
     $rss = new RSSParser($listeEpisodes);
 

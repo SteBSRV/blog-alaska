@@ -1,6 +1,11 @@
 <?php
 foreach ($comments as $comment)
 {
+	if ($comment->getState() == 0 && $comment->getReport() >= 5) {
+		$censured = 'comment-censured';
+	} else {
+		$censured = '';
+	}
 	?>
 	<div class="comment-body level-<?= $comment->getLevel()?>">
 	  	<header class="comment-header">
@@ -13,7 +18,7 @@ foreach ($comments as $comment)
 				<?= $comment->getDate()->format('d/m/Y à H\hi') ?>
 			</span>
 		</header>
-	  	<div class="comment-message">
+	  	<div class="comment-message <?= $censured?>">
 			<p><?= nl2br(htmlspecialchars($comment->getMessage())) ?></p>
 			<?php 
 			if ($comment->getLevel() < 3) {?>

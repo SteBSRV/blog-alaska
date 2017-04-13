@@ -455,6 +455,10 @@ td a:hover{
   font-style: italic;
   text-align: right;
 }
+.comment-censured{
+  background-color: #ffe4b3 !important;
+  font-style: italic;
+}
 .comment-body{
   margin-bottom: 20px;
 }

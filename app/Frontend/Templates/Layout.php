@@ -21,7 +21,7 @@
     <link href="/../../css/clean-blog.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="/../../css/font-awesome/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
@@ -76,7 +76,7 @@
                             <a href="/admin/episode-insert.html">Rédiger un épisode</a>
                           </li>
                           <li>
-                            <a href="/admin/commentaires/">Gestion commentaires</a>
+                            <a href="/admin/commentaires/">Gestion commentaires <span class="badge"><?=$nbReport?></span></a>
                           </li>
                           <li>
                             <a href="/admin/parametres/">Paramètres</a>

@@ -11,20 +11,34 @@ use \SER\BSPA\Form\FormHandler;
  
 class CommentairesController extends BackController
 {
+  protected $epiManager,
+            $comManager,
+            $nbReport,
+            $listEpisodes;
+
+  public function loadData()
+  {
+    $this->epiManager = $this->managers->getManagerOf('Episodes');
+    $this->comManager = $this->managers->getManagerOf('Comments');
+    $this->nbReport = $this->comManager->countReport();
+    $this->listEpisodes = $this->epiManager->getList();
+
+    $this->page->addVar('listeEpisodesMenu', $this->listEpisodes);
+    $this->page->addVar('nbReport', $this->nbReport);
+  }
+
   public function executeIndex(HTTPRequest $request)
   {
+    $this->loadData();
     $this->page->addVar('title', 'Gestion des commentaires');
- 
-    $episodesManager = $this->managers->getManagerOf('Episodes');
-    $commentsManager = $this->managers->getManagerOf('Comments');
 
-    $this->page->addVar('listeEpisodesMenu', $episodesManager->getList());
-    $this->page->addVar('listeComments', $commentsManager->getReported());
+    $this->page->addVar('listeComments', $this->comManager->getReported());
   }
 
   public function executeDelete(HTTPRequest $request)
   {
-    $this->managers->getManagerOf('Comments')->delete($request->getData('id'));
+    $this->loadData();
+    $this->comManager->delete($request->getData('id'));
  
     $this->app->user()->setFlash('Le commentaire a bien été supprimé !');
  
@@ -33,6 +47,7 @@ class CommentairesController extends BackController
 
   public function executeUpdate(HTTPRequest $request)
   {
+    $this->loadData();
     $this->page->addVar('title', 'Modification d\'un commentaire');
  
     if ($request->method() == 'POST')
@@ -45,7 +60,7 @@ class CommentairesController extends BackController
     }
     else
     {
-      $comment = $this->managers->getManagerOf('Comments')->get($request->getData('id'));
+      $comment = $this->comManager->get($request->getData('id'));
     }
  
     $formBuilder = new CommentFormBuilder($comment);
@@ -53,7 +68,7 @@ class CommentairesController extends BackController
  
     $form = $formBuilder->form();
  
-    $formHandler = new FormHandler($form, $this->managers->getManagerOf('Comments'), $request);
+    $formHandler = new FormHandler($form, $this->comManager, $request);
  
     if ($formHandler->process())
     {
@@ -67,6 +82,7 @@ class CommentairesController extends BackController
  
   public function processForm(HTTPRequest $request)
   {
+    $this->loadData();
     if ($request->method() == 'POST')
     {
       $episode = new Episodes([
@@ -86,7 +102,7 @@ class CommentairesController extends BackController
       // L'identifiant de l'épisode est transmis si on veut la modifier
       if ($request->getExists('id'))
       {
-        $episode = $this->managers->getManagerOf('Episodes')->getUnique($request->getData('id'));
+        $episode = $this->epiManager->getUnique($request->getData('id'));
       }
       else
       {
@@ -99,7 +115,7 @@ class CommentairesController extends BackController
  
     $form = $formBuilder->form();
  
-    $formHandler = new FormHandler($form, $this->managers->getManagerOf('Episodes'), $request);
+    $formHandler = new FormHandler($form, $this->epiManager, $request);
  
     if ($formHandler->process())
     {

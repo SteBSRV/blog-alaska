@@ -6,8 +6,25 @@ use \SER\BSPA\HTTPRequest;
  
 class ConnexionController extends BackController
 {
+  protected $epiManager,
+            $comManager,
+            $nbReport,
+            $listEpisodes;
+
+  public function loadData()
+  {
+    $this->epiManager = $this->managers->getManagerOf('Episodes');
+    $this->comManager = $this->managers->getManagerOf('Comments');
+    $this->nbReport = $this->comManager->countReport();
+    $this->listEpisodes = $this->epiManager->getList();
+
+    $this->page->addVar('listeEpisodesMenu', $this->listEpisodes);
+    $this->page->addVar('nbReport', $this->nbReport);
+  }
+
   public function executeLogin(HTTPRequest $request)
   {
+    $this->loadData();
     $this->page->addVar('title', 'Connexion');
 
     $manager = $this->managers->getManagerOf('Users');
@@ -24,7 +41,7 @@ class ConnexionController extends BackController
         $this->app->user()->setFlash('Connexion réussi, bonne visite '.$login.'.');
         $this->app->httpResponse()->setCookie('login', $login, time()+60*60*24*10, '/');
         $this->app->httpResponse()->setCookie('password', sha1($password), time()+60*60*24*10, '/');
-        $this->app->httpResponse()->redirect('/');
+        $this->app->httpResponse()->redirect('/admin/');
       }
       else
       {
@@ -35,10 +52,12 @@ class ConnexionController extends BackController
 
   public function executeLogout(HTTPRequest $request)
   {
+    $this->loadData();
     $this->page->addVar('title', 'Déconnexion');
  
     if ($this->app->user()->isAuthenticated() === true)
     {
+        $this->app->user()->setFlash('Vous êtes bien déconnecté, à bientot.');
         $this->app->user()->setAuthenticated(false);
         $this->app->httpResponse()->redirect('/');
     }

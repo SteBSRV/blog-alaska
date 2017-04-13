@@ -5,6 +5,11 @@ use \Entity\Comment;
  
 class CommentsManagerPDO extends CommentsManager
 {
+  public function countReport()
+  {
+    return $this->dao->query('SELECT SUM(report) FROM comments')->fetchColumn();
+  }
+
   protected function add(Comment $comment)
   {
     $q = $this->dao->prepare('INSERT INTO comments SET author = :author, message = :message, date = NOW(), state = 1, parentId = :parent, level = :level, episodeId = :episode ');

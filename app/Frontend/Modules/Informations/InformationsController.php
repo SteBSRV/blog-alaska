@@ -6,19 +6,33 @@ use \SER\BSPA\HTTPRequest;
  
 class InformationsController extends BackController
 {
+  protected $epiManager,
+            $comManager,
+            $nbReport,
+            $listEpisodes;
+
+  public function loadData()
+  {
+    $this->epiManager = $this->managers->getManagerOf('Episodes');
+    $this->comManager = $this->managers->getManagerOf('Comments');
+    $this->nbReport = $this->comManager->countReport();
+    $this->listEpisodes = $this->epiManager->getList();
+
+    $this->page->addVar('listeEpisodesMenu', $this->listEpisodes);
+    $this->page->addVar('nbReport', $this->nbReport);
+  }
+
   public function executeContact(HTTPRequest $request)
   {
-  	$listeEpisodesMenu = $this->managers->getManagerOf('Episodes')->getList();
+    $this->loadData();
 
     $this->page->addVar('title', 'Contact');
-    $this->page->addVar('listeEpisodesMenu', $listeEpisodesMenu);
   }
 
   public function executeAbout(HTTPRequest $request)
   {
-  	$listeEpisodesMenu = $this->managers->getManagerOf('Episodes')->getList();
-
+    $this->loadData();
+  
     $this->page->addVar('title', 'A propos');
-    $this->page->addVar('listeEpisodesMenu', $listeEpisodesMenu);
   }
 }
