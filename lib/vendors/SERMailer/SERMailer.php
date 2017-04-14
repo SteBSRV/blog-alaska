@@ -12,17 +12,19 @@ class SERMailer
 			  $message,
 			  $content_html,
 			  $content_txt,
-			  $header;
+			  $header,
+			  $template;
 
 	const INVALID_MAIL = 1;
 	const INVALID_SUBJECT = 2;
 	const INDALID_MESSAGE = 3;
 
-	public function __construct($mail, $subject)
+	public function __construct($mail, $subject, $template = 'default')
 	{
 		$this->boundary = "-----=".md5(rand());
 		$this->mail = $mail;
 		$this->subject = $subject;
+		$this->template = $template;
 	}
 
 	public function addVar($var, $value)
@@ -40,7 +42,7 @@ class SERMailer
 		extract($this->vars);
  
 	    ob_start();
-		require __DIR__.'/Templates/layout.php';
+		require __DIR__.'/Templates/'.$this->template.'.php';
 		$this->content_html = ob_get_clean();
 		$this->content_txt = strip_tags($this->content_html);
 

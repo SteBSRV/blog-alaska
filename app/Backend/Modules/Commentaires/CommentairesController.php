@@ -5,7 +5,7 @@ use \SER\BSPA\BackController;
 use \SER\BSPA\HTTPRequest;
 use \Entity\Episodes;
 use \Entity\Comment;
-use \FormBuilder\CommentFormBuilder;
+use \FormBuilder\AdminCommentFormBuilder;
 use \FormBuilder\EpisodesFormBuilder;
 use \SER\BSPA\Form\FormHandler;
  
@@ -63,7 +63,7 @@ class CommentairesController extends BackController
       $comment = $this->comManager->get($request->getData('id'));
     }
  
-    $formBuilder = new CommentFormBuilder($comment);
+    $formBuilder = new AdminCommentFormBuilder($comment);
     $formBuilder->build();
  
     $form = $formBuilder->form();

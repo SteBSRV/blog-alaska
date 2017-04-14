@@ -156,7 +156,7 @@ class EpisodesController extends BackController
     {
       $this->app->user()->setFlash('Le commentaire a bien été ajouté, merci !');
  
-      $this->app->httpResponse()->redirect('episode-'.$episode.'.html');
+      $this->app->httpResponse()->redirect('episode-'.$episodeId.'.html');
     }
  
     $this->page->addVar('comment', $comment);
@@ -176,15 +176,15 @@ class EpisodesController extends BackController
     $comment->setReport(($comment->getReport()) + 1);
     $this->comManager->save($comment);
 
-    $mail = new SERMailer('ebizetsteve@gmail.com', 'Signalement d\'un commentaire');
+    $mail = new SERMailer('ebizetsteve@gmail.com', 'Signalement d\'un commentaire', 'admin_notif_comment');
     $mail->addVar('comment', $comment);
     $mail->addVar('parentComment', $parentComment);
     $mail->addVar('episode', $episode);
     $mail->generateContent();
     $mail->send();
     
-    $this->page->addVar('comment', $commentId);
-    $this->page->addVar('title', 'Signalement d\'un commentaire');
+    $this->app->user()->setFlash('Commentaire signalé.');
+    $this->app->httpResponse()->redirect('/episode-'.$episode->getId().'.html');
   }
 
   public function executeRss(HTTPRequest $request)

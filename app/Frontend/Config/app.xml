@@ -2,4 +2,5 @@
 <definitions>
   <define var="nombre_episodes" value="5" />
   <define var="nombre_caracteres" value="400" />
+  <define var="test" value="6" />
 </definitions>

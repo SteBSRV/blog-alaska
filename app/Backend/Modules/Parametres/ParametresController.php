@@ -25,6 +25,9 @@ class ParametresController extends BackController
   public function executeConfig(HTTPRequest $request)
   {
   	$this->loadData();
+
+    $this->app->config()->modify('test','8');
+
     $this->page->addVar('title', 'Configuration');
   }
 }

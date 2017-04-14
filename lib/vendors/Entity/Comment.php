@@ -25,12 +25,6 @@ class Comment extends Entity
     return !(empty($this->author) || empty($this->message));
   }
 
-  public function censured()
-  {
-    $this->state = 0;
-    $this->message = '"Message censuré en raison de plusieurs signalement" (Modération BSPA)';
-  }
-
   // SETTERS //
  
   public function setEpisodeId($episode)
@@ -87,8 +81,8 @@ class Comment extends Entity
   {
     $this->report = $report;
 
-    if ($this->report >= 5) {
-      $this->censured();
+    if ($this->report >= 10) {
+      $this->setState(0);
     }
   }
  

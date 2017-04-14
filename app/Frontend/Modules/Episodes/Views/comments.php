@@ -1,10 +1,11 @@
 <?php
 foreach ($comments as $comment)
 {
-	if ($comment->getState() == 0 && $comment->getReport() >= 5) {
-		$censured = 'comment-censured';
+	if ($comment->getState() == 0) {
+		$censuredClass = 'comment-censured';
+		$censuredMessage = '"Message censuré en raison de plusieurs signalement" (Modération BSPA).';
 	} else {
-		$censured = '';
+		$censuredClass = '';
 	}
 	?>
 	<div class="comment-body level-<?= $comment->getLevel()?>">
@@ -18,9 +19,14 @@ foreach ($comments as $comment)
 				<?= $comment->getDate()->format('d/m/Y à H\hi') ?>
 			</span>
 		</header>
-	  	<div class="comment-message <?= $censured?>">
+	  	<div class="comment-message <?= $censuredClass?>">
+	  		<?php
+	  		if ($comment->getState() == 0) {
+	  			echo '<p>'.$censuredMessage.'</p>';
+	  		} else { ?>
 			<p><?= nl2br(htmlspecialchars($comment->getMessage())) ?></p>
-			<?php 
+			<?php
+			} 
 			if ($comment->getLevel() < 3) {?>
 				<span style="float: right;"><a href="/commenter-reponse-<?= $comment->getId() ?>.html">Répondre</a></span>
 			<?php
