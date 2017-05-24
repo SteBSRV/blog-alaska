@@ -2,6 +2,7 @@
 namespace App\Frontend;
  
 use \SER\BSPA\Application;
+use \Model\UsersManagerPDO;
  
 class FrontendApplication extends Application
 {
@@ -14,13 +15,6 @@ class FrontendApplication extends Application
  
   public function run()
   {
-    if ($this->httpRequest->cookieExists('login'))
-    {
-      $login = $_COOKIE['login'];
-      $password = $_COOKIE['password'];
-      // Check connexion
-      
-    }
     $controller = $this->getController();
     $controller->execute();
  

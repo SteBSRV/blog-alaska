@@ -99,7 +99,7 @@ class CommentairesController extends BackController
     }
     else
     {
-      // L'identifiant de l'épisode est transmis si on veut la modifier
+      // L'identifiant de l'épisode est transmis si on veut le modifier
       if ($request->getExists('id'))
       {
         $episode = $this->epiManager->getUnique($request->getData('id'));

@@ -58,15 +58,19 @@ class CommentsManagerPDO extends CommentsManager
 
   public function getReported()
   {
-    $q = $this->dao->prepare('SELECT * FROM comments WHERE report >= 1 ORDER BY id DESC');
+    $q = $this->dao->prepare('SELECT * FROM comments WHERE report >= 1 ORDER BY report DESC');
 
     $q->execute();
  
     $q->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, '\Entity\Comment');
  
+    $comments = [];
+
     $comments = $q->fetchAll();
 
-    $comments = $this->order($comments);
+    foreach ($comments as $comment) {
+      $comment->setDate(new \DateTime($comment->getDate()));
+    }
  
     return $comments;
   }

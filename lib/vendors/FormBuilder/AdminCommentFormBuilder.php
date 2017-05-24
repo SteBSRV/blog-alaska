@@ -15,7 +15,7 @@ class AdminCommentFormBuilder extends FormBuilder
     $this->form->add(new StringField([
         'label' => 'Auteur',
         'name' => 'author',
-        'value' => $_SESSION['pseudo'],
+        'value' => '',
         'maxLength' => 50,
         'disabled' => 'disabled',
         'validators' => [

@@ -34,10 +34,23 @@ abstract class EpisodesManager extends Manager
   }
  
   /**
-   * Méthode renvoyant le nombre d'épisodes total.
+   * Méthode renvoyant le nombre d'épisodes public total.
    * @return int
    */
   abstract public function count();
+
+  /**
+   * Méthode renvoyant le nombre d'épisodes total, incluant les épisodes non publics.
+   * @return int
+   */
+  abstract public function countAdmin();
+
+  /**
+   * Méthode permettant de connaitre le nombre de commentaires pour un épisode donné.
+   * @param $id int L'identifiant de l'episode concerné
+   * @return int
+   */
+  abstract public function countComments($id);
  
   /**
    * Méthode permettant de supprimer un episode.
@@ -53,6 +66,14 @@ abstract class EpisodesManager extends Manager
    * @return array La liste des episodes. Chaque entrée est une instance de Episodes.
    */
   abstract public function getList($debut = -1, $limite = -1);
+
+  /**
+   * Méthode retournant une liste d'épisodes demandés, incluant les épisodes non publics.
+   * @param $debut int Le premièr episode à sélectionner
+   * @param $limite int Le nombre d'épisodes à sélectionner
+   * @return array La liste des episodes. Chaque entrée est une instance de Episodes.
+   */
+  abstract public function getListAdmin($debut = -1, $limite = -1);
  
   /**
    * Méthode retournant un episode précis.

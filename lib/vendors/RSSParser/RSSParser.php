@@ -42,7 +42,7 @@ class RSSParser
 		foreach ($dataList as $data) {
 		    $rss .= '<item>';
 		    $rss .= '<title>' . $data->getTitle() . '</title>';
-		    $rss .= '<link>http://bspa.dev/episode-'. $data->getId() . '.html</link>';
+		    $rss .= '<link>http://' . $_SERVER['HTTP_HOST'] . '/episode-' . $data->getId() . '.html</link>';
 		    $rss .= '<description>' . strip_tags(html_entity_decode($data->getContent())) . '</description>';
 		    $rss .= '<pubDate>' . $data->getAddDate()->format('D, Y-m-d H:i:s') . '</pubDate>';
 		    $rss .= '</item>';

@@ -15,7 +15,7 @@ class ContactFormBuilder extends FormBuilder
     $this->form->add(new StringField([
         'label' => 'Auteur',
         'name' => 'author',
-        'value' => $_SESSION['pseudo'],
+        'value' => '',
         'maxLength' => 40,
         'validators' => [
           new MaxLengthValidator('Le nom spécifié est trop long (40 caractères maximum)', 40),

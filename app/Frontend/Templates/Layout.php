@@ -77,10 +77,7 @@
                           </li>
                           <li>
                             <a href="/admin/commentaires/">Gestion commentaires <span class="badge"><?=$nbReport?></span></a>
-                          </li>
-                          <li>
-                            <a href="/admin/parametres/">Paramètres</a>
-                          </li>      
+                          </li>   
                       </ul>
                     </li>
                     <li>

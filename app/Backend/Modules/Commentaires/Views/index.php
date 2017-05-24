@@ -1,6 +1,6 @@
 <h2 class="post-heading">Gestion des commentaires</h2>
 
-<p style="text-align: center">Il y a actuellement XX commentaires signalés. En voici la liste :</p>
+<p style="text-align: center">Il y a actuellement <?=$nbReport?> commentaires signalés. En voici la liste :</p>
  
 <table class="table">
 	<thead>
@@ -9,7 +9,7 @@
   			<th>Message</th>
   			<th>Date</th>
   			<th>Status</th>
-  			<th>(Signalement)</th>
+  			<th>Signalement</th>
   			<th>Episode</th>
   			<th>Action</th>
   		</tr>

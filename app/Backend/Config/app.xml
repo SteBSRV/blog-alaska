@@ -1,6 +1,3 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <definitions>
-  <define var="login" value="admin" />
-  <define var="pass" value="mdp" />
-  <define var="test" value="4" />
 </definitions>

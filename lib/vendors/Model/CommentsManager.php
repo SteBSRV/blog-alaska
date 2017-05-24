@@ -7,6 +7,13 @@ use \Entity\Comment;
 abstract class CommentsManager extends Manager
 {
   /**
+   * Méthode permettant d'obtenir le nombre de commentaires signalés.
+   * @param void
+   * @return int
+   */
+  abstract protected function countReport();
+
+  /**
    * Méthode permettant d'ajouter un commentaire.
    * @param $comment Le commentaire à ajouter
    * @return void
@@ -50,6 +57,13 @@ abstract class CommentsManager extends Manager
    * @return array
    */
   abstract public function getListOf($episodes);
+
+  /**
+   * Méthode permettant de récupérer la liste des commentaires signalés.
+   * @param void
+   * @return array
+   */
+  abstract public function getReported();
  
   /**
    * Méthode permettant de modifier un commentaire.

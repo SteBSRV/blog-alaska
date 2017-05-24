@@ -479,3 +479,7 @@ td a:hover{
   padding: 4px;
   font-size: small;
 }
+
+.site-heading h1, .subheading, .navbar-brand{
+  text-shadow: 2px 2px 2px black;
+}

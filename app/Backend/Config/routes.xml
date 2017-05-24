@@ -9,5 +9,4 @@
   <route url="/admin/episode-delete-([0-9]+)\.html" module="Episodes" action="delete" vars="id" />
   <route url="/admin/comment-update-([0-9]+)\.html" module="Commentaires" action="update" vars="id" />
   <route url="/admin/comment-delete-([0-9]+)\.html" module="Commentaires" action="delete" vars="id" />
-  <route url="/admin/parametres/" module="Parametres" action="config" />
 </routes>

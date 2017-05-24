@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<definitions>
+  <parameter var="host" value="" />
+  <parameter var="dbname" value="" />
+  <parameter var="user" value="" />
+  <parameter var="pass" value="" />
+</definitions>
